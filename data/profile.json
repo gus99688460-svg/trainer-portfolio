@@ -1,0 +1,23 @@
+{
+  "name": "조태현",
+  "title": "올라잇짐 망포점 PT 트레이너",
+  "tagline": "통증 없는 운동, 평생 가는 습관",
+  "bio": "안녕하세요. 회원님의 몸 상태와 목표에 맞춰 정직하게 코칭하는 트레이너 조태현입니다.\n\n무리한 운동보다 자세 교정과 기본기를 중요하게 생각합니다. 처음 운동을 시작하시는 분, 통증이 있어 조심스러운 분, 정체기에 머무신 분 모두 환영합니다.",
+  "profileImage": "assets/images/profile.jpg",
+  "contacts": {
+    "instagram": "https://instagram.com/your_id",
+    "kakaoOpen": "https://open.kakao.com/o/xxxxxxxx",
+    "phone": "010-0000-0000"
+  },
+  "certifications": [
+    "생활스포츠지도사 2급 (보디빌딩)",
+    "FMS Level 1",
+    "응급처치 및 심폐소생술 (CPR/AED)"
+  ],
+  "career": [
+    { "period": "2022 ~ 2026", "place": "에이블짐 종합운동장역점 지점장" },
+    { "period": "2021 ~ 2022", "place": "밀리언짐 팀장" }
+    { "period": "2019 ~ 2021", "place": "에이블짐 암사점 트레이너" }
+    { "period": "2018 ~ 2019", "place": "더블에스짐 트레이너" }
+  ]
+}
