@@ -1,0 +1,8 @@
+{
+  "items": [
+    { "id": "g1", "type": "image", "src": "assets/images/gallery/01.jpg", "caption": "스쿼트 자세 코칭" },
+    { "id": "g2", "type": "image", "src": "assets/images/gallery/02.jpg", "caption": "데드리프트 폼 체크" },
+    { "id": "g3", "type": "image", "src": "assets/images/gallery/03.jpg", "caption": "벤치프레스 보조" },
+    { "id": "g4", "type": "image", "src": "assets/images/gallery/04.jpg", "caption": "스트레칭 가이드" }
+  ]
+}
