@@ -29,6 +29,17 @@
       "text": "운동 강도가 항상 적절했고 식단도 같이 봐주셔서 6개월 동안 5kg 증량했습니다.",
       "date": "2025-10-30",
       "hidden": false
+    },
+    {
+      "id": "r4",
+      "memberName": "김○○",
+      "memberAge": "30대",
+      "memberGoal": "체중감량 + 근육량 증가",
+      "source": "카카오톡",
+      "rating": 5,
+      "image": "assets/images/reviews/KakaoTalk_20260511_234553362.jpg",
+      "date": "2026-05-11",
+      "hidden": false
     }
   ]
 }
