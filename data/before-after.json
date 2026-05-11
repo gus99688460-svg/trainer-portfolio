@@ -1,0 +1,24 @@
+{
+  "items": [
+    {
+      "id": "ba1",
+      "memberLabel": "30대 여성 회원",
+      "period": "3개월",
+      "weightBefore": 68,
+      "weightAfter": 61,
+      "beforeImage": "assets/images/before-after/ba1-before.jpg",
+      "afterImage": "assets/images/before-after/ba1-after.jpg",
+      "note": "주 2회 PT + 식단 관리"
+    },
+    {
+      "id": "ba2",
+      "memberLabel": "40대 남성 회원",
+      "period": "6개월",
+      "weightBefore": 85,
+      "weightAfter": 76,
+      "beforeImage": "assets/images/before-after/ba2-before.jpg",
+      "afterImage": "assets/images/before-after/ba2-after.jpg",
+      "note": "주 3회 PT + 유산소 추가"
+    }
+  ]
+}
