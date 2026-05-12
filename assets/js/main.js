@@ -35,8 +35,8 @@ function renderAbout(p) {
     if (!compsByYear[year]) compsByYear[year] = [];
     compsByYear[year].push(rest);
   });
-  const yearsDesc = Object.keys(compsByYear).sort((a, b) => b.localeCompare(a));
-  const compsHtml = yearsDesc.map(y => `
+  const yearsAsc = Object.keys(compsByYear).sort((a, b) => a.localeCompare(b));
+  const compsHtml = yearsAsc.map(y => `
     <div class="comp-year">
       <h4>${escapeHTML(y)}</h4>
       <ul>${compsByYear[y].map(c => `<li>${escapeHTML(c)}</li>`).join('')}</ul>
@@ -52,10 +52,10 @@ function renderAbout(p) {
   document.getElementById('about').innerHTML = `
     <h2>소개</h2>
     <p>${escapeHTML(p.bio)}</p>
-    <div class="certs"><h3>자격증</h3><ul>${certs}</ul></div>
-    <div class="certs"><h3>경력</h3><ul>${career}</ul></div>
     ${competitionImage}
     ${compsHtml ? `<div class="competitions"><h3>대회 수상</h3>${compsHtml}</div>` : ''}
+    <div class="certs"><h3>경력</h3><ul>${career}</ul></div>
+    <div class="certs"><h3>자격증</h3><ul>${certs}</ul></div>
   `;
 }
 
