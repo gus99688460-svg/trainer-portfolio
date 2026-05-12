@@ -332,3 +332,54 @@ footer {
   font-weight: 500;
   line-height: 1.3;
 }
+
+.competitions { margin-top: 32px; }
+.competitions h3 {
+  font-size: 12px;
+  color: #d4af37;
+  margin-bottom: 18px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.comp-year {
+  margin-bottom: 20px;
+  padding-left: 18px;
+  border-left: 2px solid #d4af37;
+}
+.comp-year h4 {
+  color: #d4af37;
+  font-size: 16px;
+  margin-bottom: 8px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.comp-year ul { list-style: none; }
+.comp-year li {
+  padding: 5px 0;
+  color: #ddd;
+  font-size: 14px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 14px;
+}
+.comp-year li::before {
+  content: "•";
+  color: #d4af37;
+  position: absolute;
+  left: 0;
+  font-weight: 700;
+}
+
+.competition-image {
+  margin: 28px 0;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #2a2a2a;
+  cursor: zoom-in;
+}
+.competition-image img {
+  width: 100%;
+  display: block;
+  background: #0a0a0a;
+}
