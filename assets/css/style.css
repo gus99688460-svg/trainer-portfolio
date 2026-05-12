@@ -304,3 +304,31 @@ footer {
   .review-card .chip-active:hover { background: #c19c2e; color: #0a0a0a; }
   .filter-banner .filter-clear:hover { background: #1f1f1f; color: #fff; }
 }
+
+.filter-bar { margin-bottom: 16px; }
+.filter-bar-label { color: #888; font-size: 12px; margin-bottom: 8px; letter-spacing: 0.5px; }
+.filter-bar-chips {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding-bottom: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: #2a2a2a transparent;
+}
+.filter-bar-chips::-webkit-scrollbar { height: 4px; }
+.filter-bar-chips::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 2px; }
+.filter-bar-chips::-webkit-scrollbar-track { background: transparent; }
+.filter-bar-chips .chip { flex-shrink: 0; }
+
+.review-card .chip-info {
+  display: inline-block;
+  background: #1a1a1a;
+  color: #888;
+  border: 1px solid #232323;
+  border-radius: 999px;
+  padding: 4px 11px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.3;
+}
