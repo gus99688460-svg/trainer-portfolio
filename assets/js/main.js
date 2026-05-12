@@ -9,6 +9,12 @@ function escapeHTML(s) {
   return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 }
 
+function parseGoals(s) {
+  return s ? s.split(/[+,]/).map(x => x.trim()).filter(Boolean) : [];
+}
+
+const reviewState = { all: [], filters: { gender: null, age: null, goal: null } };
+
 function renderHero(p) {
   document.getElementById('hero').innerHTML = `
     <img src="${escapeHTML(p.profileImage)}" alt="${escapeHTML(p.name)}" onerror="this.style.display='none'" />
@@ -29,16 +35,54 @@ function renderAbout(p) {
   `;
 }
 
-function renderReviews(data) {
-  const items = (data.reviews || []).filter(r => !r.hidden).map(r => {
-    const stars = r.rating ? `<div class="stars">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</div>` : '';
-    const metaParts = [r.memberName, r.memberAge, r.memberGoal, r.source].filter(Boolean).map(escapeHTML);
-    const meta = metaParts.length ? `<div class="meta">${metaParts.join(' · ')}</div>` : '';
-    const text = r.text ? `<p class="text">${escapeHTML(r.text)}</p>` : '';
-    const image = r.image ? `<figure class="review-image"><img src="${escapeHTML(r.image)}" alt="후기 캡처" loading="lazy" data-zoom="1" /></figure>` : '';
-    return `<div class="card review-card">${stars}${meta}${text}${image}</div>`;
-  }).join('');
-  document.getElementById('reviews').innerHTML = `<h2>회원 후기</h2>${items}`;
+function chip(type, value) {
+  const active = reviewState.filters[type] === value;
+  return `<button class="chip${active ? ' chip-active' : ''}" data-filter="${type}" data-value="${escapeHTML(value)}">${escapeHTML(value)}</button>`;
+}
+
+function renderReviewCard(r) {
+  const stars = r.rating ? `<div class="stars">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</div>` : '';
+  const name = r.memberName ? `<h3 class="member-name">${escapeHTML(r.memberName)}</h3>` : '';
+  const chips = [];
+  if (r.gender) chips.push(chip('gender', r.gender));
+  if (r.memberAge) chips.push(chip('age', r.memberAge));
+  parseGoals(r.memberGoal).forEach(g => chips.push(chip('goal', g)));
+  const chipsHtml = chips.length ? `<div class="chips">${chips.join('')}</div>` : '';
+  const subParts = [r.source, r.date].filter(Boolean).map(escapeHTML);
+  const sub = subParts.length ? `<div class="sub-meta">${subParts.join(' · ')}</div>` : '';
+  const text = r.text ? `<p class="text">${escapeHTML(r.text)}</p>` : '';
+  const image = r.image ? `<figure class="review-image"><img src="${escapeHTML(r.image)}" alt="후기 캡처" loading="lazy" data-zoom="1" /></figure>` : '';
+  return `<div class="card review-card">${stars}${name}${chipsHtml}${sub}${text}${image}</div>`;
+}
+
+function renderFilterBanner() {
+  const f = reviewState.filters;
+  const items = [];
+  if (f.gender) items.push({ type: 'gender', value: f.gender });
+  if (f.age) items.push({ type: 'age', value: f.age });
+  if (f.goal) items.push({ type: 'goal', value: f.goal });
+  if (!items.length) return '';
+  const pills = items.map(i => `<span class="filter-pill">${escapeHTML(i.value)}<button data-clear-filter="${i.type}" aria-label="해제">×</button></span>`).join('');
+  return `<div class="filter-banner"><span class="filter-label">필터:</span>${pills}<button class="filter-clear" data-clear-filter="all">전체 보기</button></div>`;
+}
+
+function renderReviewsView() {
+  const f = reviewState.filters;
+  const filtered = reviewState.all.filter(r => {
+    if (f.gender && r.gender !== f.gender) return false;
+    if (f.age && r.memberAge !== f.age) return false;
+    if (f.goal && !parseGoals(r.memberGoal).includes(f.goal)) return false;
+    return true;
+  });
+  const banner = renderFilterBanner();
+  const empty = filtered.length === 0 ? `<div class="empty">조건에 맞는 후기가 없습니다.</div>` : '';
+  const cards = filtered.map(renderReviewCard).join('');
+  document.getElementById('reviews').innerHTML = `<h2>회원 후기</h2>${banner}${empty}${cards}`;
+}
+
+function renderReviewsAll(data) {
+  reviewState.all = (data.reviews || []).filter(r => !r.hidden);
+  renderReviewsView();
 }
 
 function renderBeforeAfter(data) {
@@ -76,13 +120,30 @@ function renderContact(p) {
 }
 
 document.addEventListener('click', e => {
+  const filterBtn = e.target.closest('[data-filter]');
+  if (filterBtn) {
+    const type = filterBtn.getAttribute('data-filter');
+    const value = filterBtn.getAttribute('data-value');
+    reviewState.filters[type] = reviewState.filters[type] === value ? null : value;
+    renderReviewsView();
+    return;
+  }
+  const clearBtn = e.target.closest('[data-clear-filter]');
+  if (clearBtn) {
+    const t = clearBtn.getAttribute('data-clear-filter');
+    if (t === 'all') reviewState.filters = { gender: null, age: null, goal: null };
+    else reviewState.filters[t] = null;
+    renderReviewsView();
+    return;
+  }
   const img = e.target.closest('img[data-zoom="1"]');
-  if (!img) return;
-  const lb = document.createElement('div');
-  lb.className = 'lightbox';
-  lb.innerHTML = `<img src="${img.src}" alt="" />`;
-  lb.addEventListener('click', () => lb.remove());
-  document.body.appendChild(lb);
+  if (img) {
+    const lb = document.createElement('div');
+    lb.className = 'lightbox';
+    lb.innerHTML = `<img src="${img.src}" alt="" />`;
+    lb.addEventListener('click', () => lb.remove());
+    document.body.appendChild(lb);
+  }
 });
 
 async function main() {
@@ -93,7 +154,7 @@ async function main() {
     renderAbout(profile);
     renderContact(profile);
   } catch (e) { console.error(e); }
-  try { renderReviews(await loadJSON('data/reviews.json')); } catch (e) { console.error(e); }
+  try { renderReviewsAll(await loadJSON('data/reviews.json')); } catch (e) { console.error(e); }
   try { renderBeforeAfter(await loadJSON('data/before-after.json')); } catch (e) { console.error(e); }
   try { renderGallery(await loadJSON('data/gallery.json')); } catch (e) { console.error(e); }
 }
