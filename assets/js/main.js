@@ -40,13 +40,36 @@ function chip(type, value) {
   return `<button class="chip${active ? ' chip-active' : ''}" data-filter="${type}" data-value="${escapeHTML(value)}">${escapeHTML(value)}</button>`;
 }
 
+function chipInfo(value) {
+  return `<span class="chip-info">${escapeHTML(value)}</span>`;
+}
+
+function renderFilterBar() {
+  const genders = new Set();
+  const ages = new Set();
+  const goals = new Set();
+  reviewState.all.forEach(r => {
+    if (r.gender) genders.add(r.gender);
+    if (r.memberAge) ages.add(r.memberAge);
+    parseGoals(r.memberGoal).forEach(g => goals.add(g));
+  });
+  const order = (arr) => Array.from(arr).sort();
+  const chips = [
+    ...order(genders).map(v => chip('gender', v)),
+    ...order(ages).map(v => chip('age', v)),
+    ...order(goals).map(v => chip('goal', v))
+  ];
+  if (!chips.length) return '';
+  return `<div class="filter-bar"><div class="filter-bar-label">나에게 맞는 후기 찾기</div><div class="filter-bar-chips">${chips.join('')}</div></div>`;
+}
+
 function renderReviewCard(r) {
   const stars = r.rating ? `<div class="stars">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</div>` : '';
   const name = r.memberName ? `<h3 class="member-name">${escapeHTML(r.memberName)}</h3>` : '';
   const chips = [];
-  if (r.gender) chips.push(chip('gender', r.gender));
-  if (r.memberAge) chips.push(chip('age', r.memberAge));
-  parseGoals(r.memberGoal).forEach(g => chips.push(chip('goal', g)));
+  if (r.gender) chips.push(chipInfo(r.gender));
+  if (r.memberAge) chips.push(chipInfo(r.memberAge));
+  parseGoals(r.memberGoal).forEach(g => chips.push(chipInfo(g)));
   const chipsHtml = chips.length ? `<div class="chips">${chips.join('')}</div>` : '';
   const subParts = [r.source, r.date].filter(Boolean).map(escapeHTML);
   const sub = subParts.length ? `<div class="sub-meta">${subParts.join(' · ')}</div>` : '';
@@ -74,10 +97,11 @@ function renderReviewsView() {
     if (f.goal && !parseGoals(r.memberGoal).includes(f.goal)) return false;
     return true;
   });
+  const filterBar = renderFilterBar();
   const banner = renderFilterBanner();
   const empty = filtered.length === 0 ? `<div class="empty">조건에 맞는 후기가 없습니다.</div>` : '';
   const cards = filtered.map(renderReviewCard).join('');
-  document.getElementById('reviews').innerHTML = `<h2>회원 후기</h2>${banner}${empty}${cards}`;
+  document.getElementById('reviews').innerHTML = `<h2>회원 후기</h2>${filterBar}${banner}${empty}${cards}`;
 }
 
 function renderReviewsAll(data) {
