@@ -27,11 +27,35 @@ function renderHero(p) {
 function renderAbout(p) {
   const certs = (p.certifications || []).map(c => `<li>${escapeHTML(c)}</li>`).join('');
   const career = (p.career || []).map(c => `<li>${escapeHTML(c.period)} — ${escapeHTML(c.place)}</li>`).join('');
+
+  const compsByYear = {};
+  (p.competitions || []).forEach(comp => {
+    const year = comp.slice(0, 4);
+    const rest = comp.slice(5);
+    if (!compsByYear[year]) compsByYear[year] = [];
+    compsByYear[year].push(rest);
+  });
+  const yearsDesc = Object.keys(compsByYear).sort((a, b) => b.localeCompare(a));
+  const compsHtml = yearsDesc.map(y => `
+    <div class="comp-year">
+      <h4>${escapeHTML(y)}</h4>
+      <ul>${compsByYear[y].map(c => `<li>${escapeHTML(c)}</li>`).join('')}</ul>
+    </div>
+  `).join('');
+
+  const competitionImage = p.competitionImage ? `
+    <figure class="competition-image">
+      <img src="${escapeHTML(p.competitionImage)}" alt="시합 사진" loading="lazy" data-zoom="1" onerror="this.parentElement.style.display='none'" />
+    </figure>
+  ` : '';
+
   document.getElementById('about').innerHTML = `
     <h2>소개</h2>
     <p>${escapeHTML(p.bio)}</p>
     <div class="certs"><h3>자격증</h3><ul>${certs}</ul></div>
     <div class="certs"><h3>경력</h3><ul>${career}</ul></div>
+    ${competitionImage}
+    ${compsHtml ? `<div class="competitions"><h3>대회 수상</h3>${compsHtml}</div>` : ''}
   `;
 }
 
