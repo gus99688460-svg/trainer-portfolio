@@ -222,3 +222,85 @@ footer {
 }
 .lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6); }
 @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+
+.review-card .member-name { color: #fff; font-size: 17px; margin: 4px 0 10px; font-weight: 600; }
+.review-card .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.review-card .chip {
+  background: #1a1a1a;
+  color: #d4af37;
+  border: 1px solid #2a2a2a;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.1s, background 0.2s, color 0.2s;
+  font-family: inherit;
+  line-height: 1.2;
+}
+.review-card .chip:active { transform: scale(0.96); }
+.review-card .chip-active { background: #d4af37; color: #0a0a0a; border-color: #d4af37; }
+.review-card .sub-meta { font-size: 12px; color: #777; margin-bottom: 10px; letter-spacing: 0.3px; }
+
+.filter-banner {
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+.filter-banner .filter-label { color: #888; font-size: 13px; }
+.filter-banner .filter-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  background: #d4af37;
+  color: #0a0a0a;
+  border-radius: 999px;
+  padding: 4px 4px 4px 12px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.filter-banner .filter-pill button {
+  background: none;
+  border: none;
+  color: #0a0a0a;
+  font-size: 18px;
+  line-height: 1;
+  padding: 0 8px;
+  cursor: pointer;
+  font-weight: 700;
+}
+.filter-banner .filter-clear {
+  margin-left: auto;
+  background: none;
+  border: 1px solid #3a3a3a;
+  color: #ccc;
+  border-radius: 999px;
+  padding: 5px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.filter-banner .filter-clear:active { background: #1f1f1f; }
+
+.empty {
+  text-align: center;
+  color: #888;
+  padding: 30px 20px;
+  background: #141414;
+  border: 1px dashed #2a2a2a;
+  border-radius: 12px;
+  margin-bottom: 14px;
+}
+
+@media (hover: hover) {
+  .review-card .chip:hover { background: #2a2a2a; color: #f0c850; }
+  .review-card .chip-active:hover { background: #c19c2e; color: #0a0a0a; }
+  .filter-banner .filter-clear:hover { background: #1f1f1f; color: #fff; }
+}
