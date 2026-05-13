@@ -382,3 +382,63 @@ footer {
   border-radius: 12px;
   display: block;
 }
+.process-intro {
+  font-size: 16px;
+  color: #ccc;
+  line-height: 1.7;
+  margin-bottom: 32px;
+}
+.process-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.process-step {
+  background: #1a1a1a;
+  border-radius: 14px;
+  padding: 22px 18px;
+  border-left: 3px solid #4a9eff;
+}
+.process-step-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.process-step-number {
+  background: #4a9eff;
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  flex-shrink: 0;
+  letter-spacing: 0.5px;
+}
+.process-step-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+.process-step-desc {
+  color: #d0d0d0;
+  line-height: 1.7;
+  font-size: 15px;
+  margin: 0 0 14px;
+}
+.process-step-images {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+}
+.process-step-images img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 10px;
+  display: block;
+  cursor: zoom-in;
+}
