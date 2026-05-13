@@ -59,6 +59,32 @@ function renderAbout(p) {
   `;
 }
 
+function renderProcess(data) {
+  const intro = data.intro ? `<p class="process-intro">${escapeHTML(data.intro)}</p>` : '';
+  const steps = (data.steps || []).map(s => {
+    const images = (s.images || []).length
+      ? `<div class="process-step-images">${s.images.map(img =>
+          `<img src="${escapeHTML(img)}" alt="${escapeHTML(s.title)}" loading="lazy" data-zoom="1" onerror="this.style.display='none'" />`
+        ).join('')}</div>`
+      : '';
+    return `
+      <div class="process-step">
+        <div class="process-step-header">
+          <span class="process-step-number">${escapeHTML(s.number)}</span>
+          <h3 class="process-step-title">${escapeHTML(s.title)}</h3>
+        </div>
+        <p class="process-step-desc">${escapeHTML(s.description)}</p>
+        ${images}
+      </div>
+    `;
+  }).join('');
+  document.getElementById('process').innerHTML = `
+    <h2>${escapeHTML(data.title || '수업 진행 방식')}</h2>
+    ${intro}
+    <div class="process-list">${steps}</div>
+  `;
+}
+
 function chip(type, value) {
   const active = reviewState.filters[type] === value;
   return `<button class="chip${active ? ' chip-active' : ''}" data-filter="${type}" data-value="${escapeHTML(value)}">${escapeHTML(value)}</button>`;
@@ -202,6 +228,7 @@ async function main() {
     renderAbout(profile);
     renderContact(profile);
   } catch (e) { console.error(e); }
+  try { renderProcess(await loadJSON('data/process.json')); } catch (e) { console.error(e); }
   try { renderReviewsAll(await loadJSON('data/reviews.json')); } catch (e) { console.error(e); }
   try { renderBeforeAfter(await loadJSON('data/before-after.json')); } catch (e) { console.error(e); }
   try { renderGallery(await loadJSON('data/gallery.json')); } catch (e) { console.error(e); }
