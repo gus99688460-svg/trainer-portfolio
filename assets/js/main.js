@@ -300,6 +300,5 @@ async function main() {
   try { renderProcess(await loadJSON('data/process.json')); } catch (e) { console.error(e); }
   try { renderReviewsAll(await loadJSON('data/reviews.json')); } catch (e) { console.error(e); }
   try { renderBeforeAfter(await loadJSON('data/before-after.json')); } catch (e) { console.error(e); }
-  try { renderGallery(await loadJSON('data/gallery.json')); } catch (e) { console.error(e); }
 }
 main();
