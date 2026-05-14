@@ -478,3 +478,6 @@ footer {
   z-index: 10;
   pointer-events: none;
 }
+#about > p {
+  white-space: pre-line;
+}
