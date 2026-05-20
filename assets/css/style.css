@@ -481,3 +481,130 @@ footer {
 #about > p {
   white-space: pre-line;
 }
+/* ===== 후기 쓰기 버튼 ===== */
+  .write-review-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #4a9eff;
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    padding: 11px 20px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    margin: 4px 0 20px;
+  }
+  .write-review-btn:hover { background: #3a8eef; }
+
+  /* ===== 후기 작성 모달 ===== */
+  .review-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  .review-modal[hidden] { display: none; }
+  .review-modal-box {
+    position: relative;
+    background: #1a1a1a;
+    border-radius: 16px;
+    padding: 26px 22px;
+    width: 100%;
+    max-width: 440px;
+    margin: auto;
+  }
+  .review-modal-box h3 {
+    margin: 0 0 8px;
+    color: #fff;
+    font-size: 20px;
+  }
+  .review-modal-close {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    background: none;
+    border: none;
+    color: #aaa;
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  #review-form label {
+    display: block;
+    margin: 14px 0 6px;
+    font-size: 14px;
+    color: #ddd;
+    font-weight: 600;
+  }
+  #review-form input[type="text"],
+  #review-form select,
+  #review-form textarea {
+    width: 100%;
+    box-sizing: border-box;
+    background: #222;
+    border: 1px solid #3a3a3a;
+    border-radius: 8px;
+    padding: 11px 12px;
+    color: #fff;
+    font-size: 15px;
+    font-family: inherit;
+  }
+  #review-form textarea { resize: vertical; }
+  #review-form input::placeholder,
+  #review-form textarea::placeholder { color: #777; }
+  #review-form input[type="file"] {
+    width: 100%;
+    color: #ccc;
+    font-size: 14px;
+  }
+  .form-row { display: flex; gap: 12px; }
+  .form-row > div { flex: 1; }
+  .opt { color: #888; font-weight: 400; font-size: 12px; }
+  .req { color: #ff5252; }
+  .form-msg {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #ffb74d;
+    min-height: 18px;
+  }
+
+  .star-input {
+    display: flex;
+    gap: 4px;
+    font-size: 34px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .star-input span { color: #444; transition: color 0.1s; }
+  .star-input span.on { color: #ffc107; }
+
+  .review-submit {
+    width: 100%;
+    margin-top: 18px;
+    background: #4a9eff;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .review-submit:hover { background: #3a8eef; }
+  .review-submit:disabled { opacity: 0.6; cursor: default; }
+
+  .review-done { text-align: center; padding: 20px 0; }
+  .review-done p {
+    color: #eee;
+    font-size: 16px;
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
