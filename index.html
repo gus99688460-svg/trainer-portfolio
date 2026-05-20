@@ -1,107 +1,85 @@
- <!DOCTYPE html>
-  <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,
-  initial-scale=1.0" />
-    <title>트레이너 포트폴리오</title>
-    <link rel="stylesheet" href="assets/css/style.css?v=14" />
-  </head>
-  <body>
-    <header id="hero"></header>
-    <nav>
-      <a href="#about">소개</a>
-      <a href="#process">진행방식</a>
-      <a href="#reviews">후기</a>
-      <a href="#before-after">비포/애프터</a>
-      <a href="#contact">연락</a>
-    </nav>
-    <main>
-      <section id="about"></section>
-      <section id="process"></section>
-      <section id="reviews"></section>
-      <section id="before-after"></section>
-      <section id="contact"></section>
-    </main>
-    <footer>
-      <p>© <span id="year"></span> 트레이너 포트폴리오</p>
-    </footer>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>트레이너 포트폴리오</title>
+  <link rel="stylesheet" href="assets/css/style.css?v=15" />
+</head>
+<body>
+  <header id="hero"></header>
+  <nav>
+    <a href="#about">소개</a>
+    <a href="#process">진행방식</a>
+    <a href="#reviews">후기</a>
+    <a href="#before-after">비포/애프터</a>
+    <a href="#contact">연락</a>
+  </nav>
+  <main>
+    <section id="about"></section>
+    <section id="process"></section>
+    <section id="reviews"></section>
+    <section id="before-after"></section>
+    <section id="contact"></section>
+  </main>
+  <footer>
+    <p>© <span id="year"></span> 트레이너 포트폴리오</p>
+  </footer>
 
-    <!-- 후기 작성 모달 -->
-    <div id="review-modal" class="review-modal" hidden>
-      <div class="review-modal-box">
-        <button type="button" class="review-modal-close"
-  id="review-close" aria-label="닫기">×</button>
-        <div id="review-form-wrap">
-          <h3>후기 작성</h3>
-          <form id="review-form">
-            <label>별점</label>
-            <div class="star-input" id="star-input"
-  data-value="5">
-              <span data-star="1">★</span><span
-  data-star="2">★</span><span data-star="3">★</span><span
-  data-star="4">★</span><span data-star="5">★</span>
+  <!-- 후기 작성 모달 -->
+  <div id="review-modal" class="review-modal" hidden>
+    <div class="review-modal-box">
+      <button type="button" class="review-modal-close" id="review-close" aria-label="닫기">×</button>
+      <div id="review-form-wrap">
+        <h3>후기 작성</h3>
+        <form id="review-form">
+          <label>별점</label>
+          <div class="star-input" id="star-input" data-value="5">
+            <span data-star="1">★</span><span data-star="2">★</span><span data-star="3">★</span><span data-star="4">★</span><span data-star="5">★</span>
+          </div>
+          <label>이름 / 닉네임 <span class="opt">(선택)</span></label>
+          <input type="text" name="memberName" maxlength="20" placeholder="예: 김O영 / 30대 회원" />
+          <div class="form-row">
+            <div>
+              <label>성별 <span class="opt">(선택)</span></label>
+              <select name="gender">
+                <option value="">선택 안 함</option>
+                <option>여성</option>
+                <option>남성</option>
+              </select>
             </div>
-            <label>이름 / 닉네임 <span
-  class="opt">(선택)</span></label>
-            <input type="text" name="memberName"
-  maxlength="20" placeholder="예: 김O영 / 30대 회원" />
-            <div class="form-row">
-              <div>
-                <label>성별 <span
-  class="opt">(선택)</span></label>
-                <select name="gender">
-                  <option value="">선택 안 함</option>
-                  <option>여성</option>
-                  <option>남성</option>
-                </select>
-              </div>
-              <div>
-                <label>나이대 <span
-  class="opt">(선택)</span></label>
-                <select name="memberAge">
-                  <option value="">선택 안 함</option>
-                  <option>20대</option>
-                  <option>30대</option>
-                  <option>40대</option>
-                  <option>50대 이상</option>
-                </select>
-              </div>
+            <div>
+              <label>나이대 <span class="opt">(선택)</span></label>
+              <select name="memberAge">
+                <option value="">선택 안 함</option>
+                <option>20대</option>
+                <option>30대</option>
+                <option>40대</option>
+                <option>50대 이상</option>
+              </select>
             </div>
-            <label>목표 <span
-  class="opt">(선택)</span></label>
-            <input type="text" name="memberGoal"
-  maxlength="30" placeholder="예: 다이어트, 체형교정" />
-            <label>후기 내용 <span
-  class="req">*</span></label>
-            <textarea name="text" required maxlength="1000"
-  rows="5" placeholder="수업 받으면서 좋았던 점을 자유롭게
-  적어주세요 :)"></textarea>
-            <label>사진 첨부 <span class="opt">(선택,
-  1장)</span></label>
-            <input type="file" name="image" accept="image/*"
-  />
-            <div class="form-msg" id="review-msg"></div>
-            <button type="submit" class="review-submit"
-  id="review-submit">후기 등록하기</button>
-          </form>
-        </div>
-        <div class="review-done" id="review-done" hidden>
-          <p>✅ 후기가 등록되었어요!<br />확인 후 사이트에
-  공개됩니다.<br />소중한 후기 감사합니다 🙏</p>
-          <button type="button" id="review-done-close"
-  class="review-submit">닫기</button>
-        </div>
+          </div>
+          <label>목표 <span class="opt">(선택)</span></label>
+          <input type="text" name="memberGoal" maxlength="30" placeholder="예: 다이어트, 체형교정" />
+          <label>후기 내용 <span class="req">*</span></label>
+          <textarea name="text" required maxlength="1000" rows="5" placeholder="수업 받으면서 좋았던 점을 자유롭게 적어주세요 :)"></textarea>
+          <label>사진 첨부 <span class="opt">(선택, 1장)</span></label>
+          <input type="file" name="image" accept="image/*" />
+          <div class="form-msg" id="review-msg"></div>
+          <button type="submit" class="review-submit" id="review-submit">후기 등록하기</button>
+        </form>
+      </div>
+      <div class="review-done" id="review-done" hidden>
+        <p>✅ 후기가 등록되었어요!<br />확인 후 사이트에 공개됩니다.<br />소중한 후기 감사합니다 🙏</p>
+        <button type="button" id="review-done-close" class="review-submit">닫기</button>
       </div>
     </div>
+  </div>
 
-    <script src="https://www.gstatic.com/firebasejs/10.12.0/fi
-  rebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.0/fi
-  rebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.0/fi
-  rebase-auth-compat.js"></script>
-    <script src="assets/js/firebase-init.js?v=14"></script>
-    <script src="assets/js/main.js?v=14"></script>
-  </body>
-  </html>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="assets/js/firebase-init.js?v=15"></script>
+  <script src="assets/js/main.js?v=15"></script>
+</body>
+</html>
