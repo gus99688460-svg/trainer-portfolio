@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>후기 관리 · 트레이너 포트폴리오</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #111; color: #eee; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; }
+    .wrap { max-width: 640px; margin: 0 auto; padding: 20px 16px 60px; }
+    h1 { font-size: 20px; margin: 0; }
+    #login-view { max-width: 360px; margin: 70px auto; padding: 0 16px; }
+    #login-form { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
+    input { background: #222; border: 1px solid #3a3a3a; border-radius: 8px; padding: 12px; color: #fff; font-size: 15px; }
+    .btn { border: none; border-radius: 8px; padding: 11px 16px; font-size: 14px; font-weight: 700; cursor: pointer; }
+    .btn-primary { background: #4a9eff; color: #fff; }
+    .btn-approve { background: #2e7d32; color: #fff; }
+    .btn-danger { background: #3a3a3a; color: #ff9e9e; }
+    .btn-warn { background: #5a4a00; color: #ffe082; }
+    #login-msg { color: #ff8a80; font-size: 14px; min-height: 18px; }
+    .top { display: flex; justify-content: space-between; align-items: center; }
+    .tabs { display: flex; gap: 8px; margin: 18px 0; }
+    .tabs button { background: #222; color: #bbb; border: none; border-radius: 999px; padding: 9px 16px; font-size: 14px; cursor: pointer; }
+    .tabs button.active { background: #4a9eff; color: #fff; font-weight: 700; }
+    .rcard { background: #1a1a1a; border-radius: 12px; padding: 16px; margin-bottom: 14px; }
+    .rcard .stars { color: #ffc107; font-size: 16px; }
+    .rcard .name { font-weight: 700; font-size: 16px; margin: 6px 0 2px; }
+    .rcard .meta { color: #999; font-size: 13px; margin-bottom: 8px; }
+    .rcard .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+    .rcard .chip { background: #2a2a2a; color: #ccc; font-size: 12px; padding: 3px 9px; border-radius: 999px; }
+    .rcard .text { line-height: 1.6; font-size: 15px; white-space: pre-line; }
+    .rcard img { width: 100%; max-width: 240px; border-radius: 8px; margin-top: 10px; display: block; }
+    .actions { display: flex; gap: 8px; margin-top: 14px; }
+    .empty, .loading { color: #888; text-align: center; padding: 36px 0; }
+  </style>
+</head>
+<body>
+  <!-- 로그인 화면 -->
+  <div id="login-view">
+    <h1>🔒 후기 관리자 로그인</h1>
+    <form id="login-form">
+      <input type="email" id="email" placeholder="이메일" autocomplete="username" required />
+      <input type="password" id="password" placeholder="비밀번호" autocomplete="current-password" required />
+      <button type="submit" class="btn btn-primary">로그인</button>
+      <div id="login-msg"></div>
+    </form>
+  </div>
+
+  <!-- 관리 화면 -->
+  <div id="admin-view" class="wrap" hidden>
+    <div class="top">
+      <h1>후기 관리</h1>
+      <button id="logout" class="btn btn-danger">로그아웃</button>
+    </div>
+    <div class="tabs">
+      <button data-tab="pending" class="active">대기 중 <span id="cnt-pending"></span></button>
+      <button data-tab="approved">공개됨 <span id="cnt-approved"></span></button>
+    </div>
+    <div id="list"><div class="loading">불러오는 중...</div></div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="assets/js/firebase-init.js?v=14"></script>
+  <script>
+    var currentTab = 'pending';
+
+    function esc(s) {
+      if (s === null || s === undefined) return '';
+      return String(s).replace(/[&<>"']/g, function (m) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
+      });
+    }
+
+    auth.onAuthStateChanged(function (user) {
+      if (user) {
+        document.getElementById('login-view').hidden = true;
+        document.getElementById('admin-view').hidden = false;
+        loadList();
+      } else {
+        document.getElementById('login-view').hidden = false;
+        document.getElementById('admin-view').hidden = true;
+      }
+    });
+
+    document.getElementById('login-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var msg = document.getElementById('login-msg');
+      msg.textContent = '로그인 중...';
+      auth.signInWithEmailAndPassword(
+        document.getElementById('email').value,
+        document.getElementById('password').value
+      ).then(function () {
+        msg.textContent = '';
+      }).catch(function (err) {
+        console.error(err);
+        msg.textContent = '로그인 실패: 이메일/비밀번호를 확인해주세요.';
+      });
+    });
+
+    document.getElementById('logout').addEventListener('click', function () {
+      auth.signOut();
+    });
+
+    document.querySelectorAll('.tabs button').forEach(function (b) {
+      b.addEventListener('click', function () {
+        document.querySelectorAll('.tabs button').forEach(function (x) { x.classList.remove('active'); });
+        b.classList.add('active');
+        currentTab = b.getAttribute('data-tab');
+        loadList();
+      });
+    });
+
+    function loadList() {
+      var listEl = document.getElementById('list');
+      listEl.innerHTML = '<div class="loading">불러오는 중...</div>';
+      var approved = (currentTab === 'approved');
+      db.collection('reviews').where('approved', '==', approved).get().then(function (snap) {
+        var rows = snap.docs.map(function (d) { var o = d.data(); o._id = d.id; return o; });
+        rows.sort(function (a, b) {
+          return ((b.createdAt && b.createdAt.seconds) || 0) - ((a.createdAt && a.createdAt.seconds) || 0);
+        });
+        renderList(rows);
+        updateCounts();
+      }).catch(function (err) {
+        console.error(err);
+        listEl.innerHTML = '<div class="empty">불러오기 실패: ' + esc(err.message) + '</div>';
+      });
+    }
+
+    function updateCounts() {
+      db.collection('reviews').where('approved', '==', false).get().then(function (s) {
+        document.getElementById('cnt-pending').textContent = '(' + s.size + ')';
+      });
+      db.collection('reviews').where('approved', '==', true).get().then(function (s) {
+        document.getElementById('cnt-approved').textContent = '(' + s.size + ')';
+      });
+    }
+
+    function renderList(rows) {
+      var listEl = document.getElementById('list');
+      if (!rows.length) {
+        listEl.innerHTML = '<div class="empty">' + (currentTab === 'pending' ? '대기 중인 후기가 없어요.' : '공개된 후기가 없어요.') + '</div>';
+        return;
+      }
+      listEl.innerHTML = rows.map(function (r) {
+        var stars = r.rating ? '<div class="stars">' + '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating) + '</div>' : '';
+        var name = r.memberName ? '<div class="name">' + esc(r.memberName) + '</div>' : '';
+        var chips = [];
+        if (r.gender) chips.push(r.gender);
+        if (r.memberAge) chips.push(r.memberAge);
+        if (r.memberGoal) chips.push(r.memberGoal);
+        var chipsHtml = chips.length ? '<div class="chips">' + chips.map(function (c) { return '<span class="chip">' + esc(c) + '</span>'; }).join('') + '</div>' : '';
+        var meta = [r.source, r.date].filter(Boolean).map(esc).join(' · ');
+        var metaHtml = meta ? '<div class="meta">' + meta + '</div>' : '';
+        var text = r.text ? '<div class="text">' + esc(r.text) + '</div>' : '';
+        var img = r.image ? '<img src="' + r.image + '" alt="후기 사진">' : '';
+        var actions;
+        if (currentTab === 'pending') {
+          actions = '<button class="btn btn-approve" onclick="approveReview(\'' + r._id + '\')">✅ 승인(공개)</button>'
+                  + '<button class="btn btn-danger" onclick="deleteReview(\'' + r._id + '\')">🗑 삭제</button>';
+        } else {
+          actions = '<button class="btn btn-warn" onclick="unapproveReview(\'' + r._id + '\')">↩ 공개 취소</button>'
+                  + '<button class="btn btn-danger" onclick="deleteReview(\'' + r._id + '\')">🗑 삭제</button>';
+        }
+        return '<div class="rcard">' + stars + name + chipsHtml + metaHtml + text + img + '<div class="actions">' + actions + '</div></div>';
+      }).join('');
+    }
+
+    window.approveReview = function (id) {
+      db.collection('reviews').doc(id).update({ approved: true }).then(loadList).catch(function (e) { alert('실패: ' + e.message); });
+    };
+    window.unapproveReview = function (id) {
+      db.collection('reviews').doc(id).update({ approved: false }).then(loadList).catch(function (e) { alert('실패: ' + e.message); });
+    };
+    window.deleteReview = function (id) {
+      if (!confirm('정말 삭제할까요? 되돌릴 수 없어요.')) return;
+      db.collection('reviews').doc(id).delete().then(loadList).catch(function (e) { alert('실패: ' + e.message); });
+    };
+  </script>
+</body>
+</html>
