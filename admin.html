@@ -17,12 +17,16 @@
     .btn-approve { background: #2e7d32; color: #fff; }
     .btn-danger { background: #3a3a3a; color: #ff9e9e; }
     .btn-warn { background: #5a4a00; color: #ffe082; }
+    .btn-feat { background: #3a3000; color: #ffe082; }
+    .btn-feat-on { background: linear-gradient(135deg, #d4af37, #b8941f); color: #0a0a0a; }
     #login-msg { color: #ff8a80; font-size: 14px; min-height: 18px; }
     .top { display: flex; justify-content: space-between; align-items: center; }
     .tabs { display: flex; gap: 8px; margin: 18px 0; }
     .tabs button { background: #222; color: #bbb; border: none; border-radius: 999px; padding: 9px 16px; font-size: 14px; cursor: pointer; }
     .tabs button.active { background: #4a9eff; color: #fff; font-weight: 700; }
+    .hint { color: #888; font-size: 13px; margin: -6px 0 14px; }
     .rcard { background: #1a1a1a; border-radius: 12px; padding: 16px; margin-bottom: 14px; }
+    .feat-badge { display: inline-block; background: linear-gradient(135deg, #d4af37, #b8941f); color: #0a0a0a; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px; margin-bottom: 8px; }
     .rcard .stars { color: #ffc107; font-size: 16px; }
     .rcard .name { font-weight: 700; font-size: 16px; margin: 6px 0 2px; }
     .rcard .meta { color: #999; font-size: 13px; margin-bottom: 8px; }
@@ -30,7 +34,7 @@
     .rcard .chip { background: #2a2a2a; color: #ccc; font-size: 12px; padding: 3px 9px; border-radius: 999px; }
     .rcard .text { line-height: 1.6; font-size: 15px; white-space: pre-line; }
     .rcard img { width: 100%; max-width: 240px; border-radius: 8px; margin-top: 10px; display: block; }
-    .actions { display: flex; gap: 8px; margin-top: 14px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
     .empty, .loading { color: #888; text-align: center; padding: 36px 0; }
   </style>
 </head>
@@ -62,7 +66,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-  <script src="assets/js/firebase-init.js?v=15"></script>
+  <script src="assets/js/firebase-init.js?v=16"></script>
   <script>
     var currentTab = 'pending';
 
@@ -140,11 +144,15 @@
 
     function renderList(rows) {
       var listEl = document.getElementById('list');
+      var hint = currentTab === 'approved'
+        ? '<div class="hint">⭐ 추천 설정한 후기는 사이트의 "추천순"에서 맨 위에 보여요. (5개 정도 권장)</div>'
+        : '<div class="hint">승인하면 사이트 후기 섹션에 공개됩니다.</div>';
       if (!rows.length) {
-        listEl.innerHTML = '<div class="empty">' + (currentTab === 'pending' ? '대기 중인 후기가 없어요.' : '공개된 후기가 없어요.') + '</div>';
+        listEl.innerHTML = hint + '<div class="empty">' + (currentTab === 'pending' ? '대기 중인 후기가 없어요.' : '공개된 후기가 없어요.') + '</div>';
         return;
       }
-      listEl.innerHTML = rows.map(function (r) {
+      listEl.innerHTML = hint + rows.map(function (r) {
+        var featBadge = r.featured ? '<span class="feat-badge">⭐ 추천중</span>' : '';
         var stars = r.rating ? '<div class="stars">' + '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating) + '</div>' : '';
         var name = r.memberName ? '<div class="name">' + esc(r.memberName) + '</div>' : '';
         var chips = [];
@@ -161,10 +169,14 @@
           actions = '<button class="btn btn-approve" onclick="approveReview(\'' + r._id + '\')">✅ 승인(공개)</button>'
                   + '<button class="btn btn-danger" onclick="deleteReview(\'' + r._id + '\')">🗑 삭제</button>';
         } else {
-          actions = '<button class="btn btn-warn" onclick="unapproveReview(\'' + r._id + '\')">↩ 공개 취소</button>'
+          var featBtn = r.featured
+            ? '<button class="btn btn-feat-on" onclick="toggleFeatured(\'' + r._id + '\', false)">⭐ 추천 해제</button>'
+            : '<button class="btn btn-feat" onclick="toggleFeatured(\'' + r._id + '\', true)">☆ 추천 설정</button>';
+          actions = featBtn
+                  + '<button class="btn btn-warn" onclick="unapproveReview(\'' + r._id + '\')">↩ 공개 취소</button>'
                   + '<button class="btn btn-danger" onclick="deleteReview(\'' + r._id + '\')">🗑 삭제</button>';
         }
-        return '<div class="rcard">' + stars + name + chipsHtml + metaHtml + text + img + '<div class="actions">' + actions + '</div></div>';
+        return '<div class="rcard">' + featBadge + stars + name + chipsHtml + metaHtml + text + img + '<div class="actions">' + actions + '</div></div>';
       }).join('');
     }
 
@@ -177,6 +189,9 @@
     window.deleteReview = function (id) {
       if (!confirm('정말 삭제할까요? 되돌릴 수 없어요.')) return;
       db.collection('reviews').doc(id).delete().then(loadList).catch(function (e) { alert('실패: ' + e.message); });
+    };
+    window.toggleFeatured = function (id, val) {
+      db.collection('reviews').doc(id).update({ featured: val }).then(loadList).catch(function (e) { alert('실패: ' + e.message); });
     };
   </script>
 </body>

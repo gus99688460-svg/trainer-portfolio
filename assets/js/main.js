@@ -13,7 +13,7 @@ function parseGoals(s) {
   return s ? s.split(/[+,]/).map(x => x.trim()).filter(Boolean) : [];
 }
 
-const reviewState = { all: [], filters: { gender: null, age: null, goal: null } };
+const reviewState = { all: [], filters: { gender: null, age: null, goal: null }, sortMode: 'latest' };
 
 function renderHero(p) {
   document.getElementById('hero').innerHTML = `
@@ -114,6 +114,7 @@ function renderFilterBar() {
 }
 
 function renderReviewCard(r) {
+  const badge = r.featured ? `<div class="review-badge">⭐ 추천 후기</div>` : '';
   const stars = r.rating ? `<div class="stars">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</div>` : '';
   const name = r.memberName ? `<h3 class="member-name">${escapeHTML(r.memberName)}</h3>` : '';
   const chips = [];
@@ -125,7 +126,7 @@ function renderReviewCard(r) {
   const sub = subParts.length ? `<div class="sub-meta">${subParts.join(' · ')}</div>` : '';
   const text = r.text ? `<p class="text">${escapeHTML(r.text)}</p>` : '';
   const image = r.image ? `<figure class="review-image"><img src="${escapeHTML(r.image)}" alt="후기 캡처" loading="lazy" data-zoom="1" /></figure>` : '';
-  return `<div class="card review-card">${stars}${name}${chipsHtml}${sub}${text}${image}</div>`;
+  return `<div class="card review-card${r.featured ? ' featured' : ''}">${badge}${stars}${name}${chipsHtml}${sub}${text}${image}</div>`;
 }
 
 function renderFilterBanner() {
@@ -139,6 +140,12 @@ function renderFilterBanner() {
   return `<div class="filter-banner"><span class="filter-label">필터:</span>${pills}<button class="filter-clear" data-clear-filter="all">전체 보기</button></div>`;
 }
 
+function reviewSortKey(r) {
+  if (r.createdAt && typeof r.createdAt.seconds === 'number') return r.createdAt.seconds * 1000;
+  if (r.date) { const t = Date.parse(r.date); if (!isNaN(t)) return t; }
+  return 0;
+}
+
 function renderReviewsView() {
   const f = reviewState.filters;
   const filtered = reviewState.all.filter(r => {
@@ -147,11 +154,24 @@ function renderReviewsView() {
     if (f.goal && !parseGoals(r.memberGoal).includes(f.goal)) return false;
     return true;
   });
+  if (reviewState.sortMode === 'featured') {
+    filtered.sort((a, b) => {
+      const fa = a.featured ? 1 : 0, fb = b.featured ? 1 : 0;
+      if (fa !== fb) return fb - fa;
+      return reviewSortKey(b) - reviewSortKey(a);
+    });
+  } else {
+    filtered.sort((a, b) => reviewSortKey(b) - reviewSortKey(a));
+  }
+  const sortToggle = `<div class="sort-toggle">
+    <button data-sort="latest" class="${reviewState.sortMode === 'latest' ? 'active' : ''}">최신순</button>
+    <button data-sort="featured" class="${reviewState.sortMode === 'featured' ? 'active' : ''}">추천순</button>
+  </div>`;
   const filterBar = renderFilterBar();
   const banner = renderFilterBanner();
   const empty = filtered.length === 0 ? `<div class="empty">아직 등록된 후기가 없습니다. 첫 후기를 남겨주세요!</div>` : '';
   const cards = filtered.map(renderReviewCard).join('');
-  document.getElementById('reviews').innerHTML = `<h2>회원 후기</h2><button class="write-review-btn" id="write-review">✏️ 후기 쓰기</button>${filterBar}${banner}${empty}${cards}`;
+  document.getElementById('reviews').innerHTML = `<h2>회원 후기</h2><button class="write-review-btn" id="write-review">✏️ 후기 쓰기</button>${sortToggle}${filterBar}${banner}${empty}${cards}`;
 }
 
 function renderReviewsAll(data) {
@@ -290,7 +310,6 @@ async function loadApprovedReviews() {
   if (!db) return [];
   const snap = await db.collection('reviews').where('approved', '==', true).get();
   const rows = snap.docs.map(d => d.data());
-  rows.sort((a, b) => ((b.createdAt && b.createdAt.seconds) || 0) - ((a.createdAt && a.createdAt.seconds) || 0));
   return rows;
 }
 
@@ -360,6 +379,7 @@ function setupReviewForm() {
         source: '사이트 후기',
         date: new Date().toISOString().slice(0, 10),
         approved: false,
+        featured: false,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
       document.getElementById('review-form-wrap').hidden = true;
@@ -378,6 +398,12 @@ document.addEventListener('click', e => {
   if (e.target.closest('#write-review')) { openReviewModal(); return; }
   if (e.target.id === 'review-close' || e.target.id === 'review-done-close' || e.target.id === 'review-modal') {
     closeReviewModal();
+    return;
+  }
+  const sortBtn = e.target.closest('[data-sort]');
+  if (sortBtn) {
+    reviewState.sortMode = sortBtn.getAttribute('data-sort');
+    renderReviewsView();
     return;
   }
   const filterBtn = e.target.closest('[data-filter]');

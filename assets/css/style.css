@@ -608,3 +608,45 @@ footer {
     line-height: 1.7;
     margin-bottom: 20px;
   }
+
+/* ===== 후기 정렬 토글 (최신순 / 추천순) ===== */
+.sort-toggle {
+  display: flex;
+  width: fit-content;
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 999px;
+  padding: 4px;
+  margin: 0 0 18px;
+  gap: 4px;
+}
+.sort-toggle button {
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 8px 22px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s, color 0.2s;
+}
+.sort-toggle button.active {
+  background: linear-gradient(135deg, #d4af37, #b8941f);
+  color: #0a0a0a;
+}
+
+/* 추천 후기 강조 */
+.review-card.featured { border-color: #d4af37; }
+.review-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #d4af37, #b8941f);
+  color: #0a0a0a;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+  letter-spacing: 0.3px;
+}
