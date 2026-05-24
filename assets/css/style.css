@@ -790,3 +790,25 @@ body { padding-bottom: 76px; }
   .sticky-cta { display: none; }
   body { padding-bottom: 0; }
 }
+
+/* FAQ — 방문자 걱정 미리 풀기 (hero 아래) */
+.faq-intro { color: #aaa; font-size: 14px; line-height: 1.6; margin: -6px 0 18px; }
+.faq-list { display: flex; flex-direction: column; gap: 12px; }
+.faq-card {
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-left: 3px solid #d4af37;
+  border-radius: 14px;
+  padding: 16px 18px;
+}
+.faq-q {
+  display: flex; align-items: center; gap: 8px;
+  color: #fff; font-weight: 800; font-size: 16px; line-height: 1.45;
+  margin-bottom: 8px;
+}
+.faq-icon { font-size: 18px; flex-shrink: 0; }
+.faq-a { color: #ccc; font-size: 14px; line-height: 1.75; margin: 0; }
+@media (min-width: 768px) {
+  .faq-q { font-size: 17px; }
+  .faq-a { font-size: 15px; }
+}

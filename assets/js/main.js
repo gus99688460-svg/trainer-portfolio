@@ -465,6 +465,21 @@ document.addEventListener('click', e => {
   if (img) openLightbox(img);
 });
 
+function renderFaq(data) {
+  const el = document.getElementById('faq');
+  if (!el) return;
+  const items = data.items || [];
+  if (!items.length) { el.style.display = 'none'; return; }
+  const intro = data.intro ? `<p class="faq-intro">${escapeHTML(data.intro)}</p>` : '';
+  const cards = items.map(it => `
+    <div class="faq-card">
+      <div class="faq-q">${it.icon ? `<span class="faq-icon">${escapeHTML(it.icon)}</span>` : ''}${escapeHTML(it.q)}</div>
+      <p class="faq-a">${escapeHTML(it.a)}</p>
+    </div>
+  `).join('');
+  el.innerHTML = `<h2>${escapeHTML(data.title || '자주 묻는 질문')}</h2>${intro}<div class="faq-list">${cards}</div>`;
+}
+
 // ===== 시작: 본문은 firebase와 무관하게 항상 렌더 =====
 async function main() {
   const yearEl = document.getElementById('year');
@@ -478,6 +493,8 @@ async function main() {
     renderAbout(profile);
     renderContact(profile);
   } catch (e) { console.error(e); }
+
+  try { renderFaq(await loadJSON('data/faq.json')); } catch (e) { console.error(e); }
 
   try { renderProcess(await loadJSON('data/process.json')); } catch (e) { console.error(e); }
 
