@@ -19,15 +19,17 @@ function renderHero(p) {
   const c = p.contacts || {};
   const primary = c.kakaoOpen || c.instagram || '#';
   const compCount = (p.competitions || []).length;
+  const kw = (p.keywords || []).map(k => `<span>${escapeHTML(k)}</span>`).join('');
   document.getElementById('hero').innerHTML = `
     <img src="${escapeHTML(p.profileImage)}" alt="${escapeHTML(p.name)}"
          width="160" height="160" fetchpriority="high"
          onerror="this.style.display='none'" />
     <h1>${escapeHTML(p.name)}</h1>
-    <div class="title">${escapeHTML(p.title)}</div>
+    ${p.title ? `<div class="title">${escapeHTML(p.title)}</div>` : ''}
+    ${kw ? `<div class="hero-keywords">${kw}</div>` : ''}
     <div class="tagline">${escapeHTML(p.tagline)}</div>
     <div class="hero-badges">
-      <div class="hero-badge"><strong>9년차</strong><span>경력 트레이너</span></div>
+      <div class="hero-badge"><strong>1,000명+</strong><span>9년간 트레이닝</span></div>
       <div class="hero-badge"><strong>${compCount}회</strong><span>대회 수상</span></div>
       <div class="hero-badge"><strong>체형 교정</strong><span>자세·밸런스</span></div>
     </div>
@@ -230,8 +232,7 @@ function renderBeforeAfter(data) {
       <p class="summary">${escapeHTML(b.note || '')}</p>
     </div>`;
   }).join('');
-  const intro = `<p class="ba-intro">실제 회원님들의 변화예요. (본인 동의 후 게시 · 왼쪽 Before → 오른쪽 After)</p>`;
-  section.innerHTML = `<h2>비포 / 애프터</h2>${intro}${items}`;
+  section.innerHTML = `<h2>비포 / 애프터</h2>${items}`;
 }
 
 function renderContact(p) {

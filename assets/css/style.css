@@ -859,3 +859,26 @@ body { padding-bottom: 76px; }
   padding: 5px 14px;
   border-radius: 999px;
 }
+
+/* HERO 핵심 키워드 칩 */
+.hero-keywords {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 7px;
+  margin: 14px auto 0;
+  max-width: 380px;
+}
+.hero-keywords span {
+  font-size: 12px;
+  font-weight: 600;
+  color: #d4af37;
+  background: rgba(212, 175, 55, 0.08);
+  border: 1px solid rgba(212, 175, 55, 0.30);
+  border-radius: 999px;
+  padding: 5px 11px;
+}
+@media (min-width: 768px) {
+  .hero-keywords { max-width: 460px; }
+  .hero-keywords span { font-size: 13px; }
+}
