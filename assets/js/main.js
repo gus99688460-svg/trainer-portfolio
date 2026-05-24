@@ -16,11 +16,23 @@ function parseGoals(s) {
 const reviewState = { all: [], filters: { gender: null, age: null, goal: null }, sortMode: 'latest' };
 
 function renderHero(p) {
+  const c = p.contacts || {};
+  const primary = c.kakaoOpen || c.instagram || '#';
+  const compCount = (p.competitions || []).length;
   document.getElementById('hero').innerHTML = `
-    <img src="${escapeHTML(p.profileImage)}" alt="${escapeHTML(p.name)}" onerror="this.style.display='none'" />
+    <img src="${escapeHTML(p.profileImage)}" alt="${escapeHTML(p.name)}"
+         width="160" height="160" fetchpriority="high"
+         onerror="this.style.display='none'" />
     <h1>${escapeHTML(p.name)}</h1>
     <div class="title">${escapeHTML(p.title)}</div>
     <div class="tagline">${escapeHTML(p.tagline)}</div>
+    <div class="hero-badges">
+      <div class="hero-badge"><strong>9년차</strong><span>경력 트레이너</span></div>
+      <div class="hero-badge"><strong>${compCount}회</strong><span>대회 수상</span></div>
+      <div class="hero-badge"><strong>재활 전문</strong><span>근육학·교정</span></div>
+    </div>
+    <div class="hero-trust">실력은 확실하게, 운동은 안전하게</div>
+    <a class="hero-cta" href="${escapeHTML(primary)}" target="_blank" rel="noopener">상담받기 →</a>
   `;
 }
 
@@ -49,11 +61,15 @@ function renderAbout(p) {
     </figure>
   ` : '';
 
+  const compCount = (p.competitions || []).length;
   document.getElementById('about').innerHTML = `
     <h2>소개</h2>
     <p>${escapeHTML(p.bio)}</p>
     ${competitionImage}
-    ${compsHtml ? `<div class="competitions"><h3>대회 수상</h3>${compsHtml}</div>` : ''}
+    ${compsHtml ? `<div class="competitions">
+      <h3>대회 수상 <span class="comp-count">${compCount}회</span></h3>
+      <p class="comp-sub">직접 출전해 만든 결과입니다. 가르치는 사람이 먼저 해봤다는 증거예요.</p>
+      ${compsHtml}</div>` : ''}
     <div class="certs"><h3>경력</h3><ul>${career}</ul></div>
     <div class="certs"><h3>자격증</h3><ul>${certs}</ul></div>
   `;
@@ -169,9 +185,12 @@ function renderReviewsView() {
   </div>`;
   const filterBar = renderFilterBar();
   const banner = renderFilterBanner();
-  const empty = filtered.length === 0 ? `<div class="empty">아직 등록된 후기가 없습니다. 첫 후기를 남겨주세요!</div>` : '';
+  const collecting = reviewState.all.length < 3
+    ? `<div class="reviews-note">사이트를 새로 열며 회원님들의 후기를 모으고 있어요. 수업 받아보셨다면 한 줄 남겨주시면 큰 힘이 됩니다 🙏</div>`
+    : '';
+  const empty = filtered.length === 0 ? `<div class="empty">후기를 모으는 중입니다. 첫 후기의 주인공이 되어 주세요 :)</div>` : '';
   const cards = filtered.map(renderReviewCard).join('');
-  document.getElementById('reviews').innerHTML = `<h2>회원 후기</h2><button class="write-review-btn" id="write-review">✏️ 후기 쓰기</button>${sortToggle}${filterBar}${banner}${empty}${cards}`;
+  document.getElementById('reviews').innerHTML = `<h2>회원 후기</h2>${collecting}<button class="write-review-btn" id="write-review">✏️ 후기 쓰기</button>${sortToggle}${filterBar}${banner}${empty}${cards}`;
 }
 
 function renderReviewsAll(data) {
@@ -208,12 +227,22 @@ function renderContact(p) {
   const c = p.contacts || {};
   document.getElementById('contact').innerHTML = `
     <h2>상담 / 연락</h2>
+    <p class="contact-lead">운동, 시작이 제일 어렵죠. 그 첫걸음을 같이 정리해드릴게요.</p>
+    <p class="contact-sub">지금 어떤 점이 고민인지, 편하게 물어만 보셔도 괜찮아요. 부담 없이 메시지 주세요.</p>
     <div class="contact-buttons">
-      ${c.instagram ? `<a class="insta" href="${escapeHTML(c.instagram)}" target="_blank" rel="noopener">인스타그램 DM</a>` : ''}
-      ${c.kakaoOpen ? `<a class="kakao" href="${escapeHTML(c.kakaoOpen)}" target="_blank" rel="noopener">카카오톡 오픈채팅</a>` : ''}
+      ${c.instagram ? `<a class="insta" href="${escapeHTML(c.instagram)}" target="_blank" rel="noopener">인스타그램으로 문의하기</a>` : ''}
+      ${c.kakaoOpen ? `<a class="kakao" href="${escapeHTML(c.kakaoOpen)}" target="_blank" rel="noopener">카카오톡으로 문의하기</a>` : ''}
       ${c.phone ? `<a class="phone" href="tel:${escapeHTML(c.phone.replace(/-/g,''))}">${escapeHTML(c.phone)}</a>` : ''}
     </div>
   `;
+  const sticky = document.getElementById('sticky-cta');
+  if (sticky) {
+    const sk = document.getElementById('sticky-kakao');
+    const si = document.getElementById('sticky-insta');
+    if (c.kakaoOpen && sk) sk.href = c.kakaoOpen; else if (sk) sk.style.display = 'none';
+    if (c.instagram && si) si.href = c.instagram; else if (si) si.style.display = 'none';
+    if (c.kakaoOpen || c.instagram) sticky.hidden = false;
+  }
 }
 
 function openLightbox(clickedImg) {

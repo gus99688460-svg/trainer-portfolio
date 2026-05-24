@@ -34,6 +34,8 @@ a { color: inherit; }
   object-fit: cover;
   border: 3px solid #d4af37;
   box-shadow: 0 0 40px rgba(212, 175, 55, 0.25);
+  background: #141414;
+  content-visibility: auto;
 }
 #hero h1 { font-size: 32px; margin-bottom: 10px; font-weight: 700; letter-spacing: -0.5px; }
 #hero .title {
@@ -42,6 +44,69 @@ a { color: inherit; }
   letter-spacing: 2px; text-transform: uppercase; font-weight: 600;
 }
 #hero .tagline { font-size: 17px; font-weight: 300; color: #bbb; line-height: 1.6; }
+
+/* HERO 신뢰 배지 */
+.hero-badges {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 26px;
+}
+.hero-badge {
+  flex: 1 1 0;
+  max-width: 110px;
+  background: rgba(212, 175, 55, 0.06);
+  border: 1px solid rgba(212, 175, 55, 0.28);
+  border-radius: 12px;
+  padding: 12px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.hero-badge strong {
+  font-size: 20px;
+  font-weight: 800;
+  color: #d4af37;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+}
+.hero-badge span {
+  font-size: 11px;
+  color: #aaa;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  line-height: 1.3;
+}
+
+/* HERO 포지셔닝 한 줄 */
+.hero-trust {
+  margin-top: 14px;
+  font-size: 13px;
+  color: #d4af37;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+/* HERO 1차 CTA */
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 26px;
+  padding: 15px 34px;
+  min-height: 52px;
+  background: linear-gradient(135deg, #d4af37, #b8941f);
+  color: #0a0a0a;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  text-decoration: none;
+  border-radius: 999px;
+  box-shadow: 0 6px 24px rgba(212, 175, 55, 0.30);
+  transition: transform 0.15s, box-shadow 0.2s;
+}
+.hero-cta:active { transform: scale(0.97); }
 
 nav {
   position: sticky; top: 0; z-index: 10;
@@ -195,6 +260,7 @@ footer {
   nav a:hover { color: #d4af37; }
   .card:hover { border-color: #d4af37; transform: translateY(-2px); }
   .contact-buttons a:hover { transform: translateY(-2px); }
+  .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(212, 175, 55, 0.4); }
 }
 
 @media (min-width: 768px) {
@@ -205,6 +271,10 @@ footer {
   main section h2 { font-size: 26px; }
   .gallery-grid { grid-template-columns: repeat(3, 1fr); }
   nav a { padding: 20px 24px; }
+  .hero-badge strong { font-size: 24px; }
+  .hero-badge { max-width: 130px; padding: 16px 10px; }
+  .hero-trust { font-size: 15px; }
+  .hero-cta { font-size: 17px; padding: 16px 40px; }
 }
 
 .review-image { margin-top: 14px; border-radius: 10px; overflow: hidden; border: 1px solid #2a2a2a; cursor: zoom-in; }
@@ -649,4 +719,74 @@ footer {
   border-radius: 999px;
   margin-bottom: 12px;
   letter-spacing: 0.3px;
+}
+
+/* ===== 후기 "수집 중" 정직 배너 ===== */
+.reviews-note {
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-left: 3px solid #d4af37;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  color: #bbb;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+/* ===== 대회 수상 카운트 pill + 부제 ===== */
+.comp-count {
+  display: inline-block;
+  margin-left: 8px;
+  background: linear-gradient(135deg, #d4af37, #b8941f);
+  color: #0a0a0a;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 3px 12px;
+  border-radius: 999px;
+  letter-spacing: 0;
+  vertical-align: middle;
+}
+.comp-sub { color: #999; font-size: 13px; margin: 2px 0 10px; line-height: 1.6; }
+
+/* ===== 상담 CTA 유도 문구 ===== */
+.contact-lead { color: #eee; font-size: 16px; font-weight: 700; margin: 0 0 6px; line-height: 1.55; }
+.contact-sub { color: #aaa; font-size: 14px; margin: 0 0 18px; line-height: 1.6; }
+@media (min-width: 768px) { .contact-lead { font-size: 18px; } }
+
+/* ===== 모바일 하단 고정 상담 바 ===== */
+.sticky-cta {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 50;
+  display: flex;
+  gap: 8px;
+  padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+  background: rgba(10, 10, 10, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid #1f1f1f;
+}
+.sticky-cta[hidden] { display: none; }
+.sticky-cta-btn {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center;
+  min-height: 50px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 800;
+  text-decoration: none;
+  letter-spacing: 0.2px;
+}
+.sticky-cta-btn.kakao { background: #fee500; color: #3c1e1e; }
+.sticky-cta-btn.insta {
+  background: linear-gradient(45deg, #f09433, #dc2743, #bc1888);
+  color: #fff;
+}
+/* 고정 바에 본문이 안 가리도록 여백 */
+body { padding-bottom: 76px; }
+/* 데스크톱에선 하단 고정 대신 자연스러운 contact 섹션만 — 숨김 */
+@media (min-width: 768px) {
+  .sticky-cta { display: none; }
+  body { padding-bottom: 0; }
 }
