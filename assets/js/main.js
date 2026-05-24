@@ -29,7 +29,7 @@ function renderHero(p) {
     <div class="hero-badges">
       <div class="hero-badge"><strong>9년차</strong><span>경력 트레이너</span></div>
       <div class="hero-badge"><strong>${compCount}회</strong><span>대회 수상</span></div>
-      <div class="hero-badge"><strong>재활 전문</strong><span>근육학·교정</span></div>
+      <div class="hero-badge"><strong>체형 교정</strong><span>자세·밸런스</span></div>
     </div>
     <div class="hero-trust">실력은 확실하게, 운동은 안전하게</div>
     <a class="hero-cta" href="${escapeHTML(primary)}" target="_blank" rel="noopener">상담받기 →</a>
@@ -68,7 +68,6 @@ function renderAbout(p) {
     ${competitionImage}
     ${compsHtml ? `<div class="competitions">
       <h3>대회 수상 <span class="comp-count">${compCount}회</span></h3>
-      <p class="comp-sub">직접 출전해 만든 결과입니다. 가르치는 사람이 먼저 해봤다는 증거예요.</p>
       ${compsHtml}</div>` : ''}
     <div class="certs"><h3>경력</h3><ul>${career}</ul></div>
     <div class="certs"><h3>자격증</h3><ul>${certs}</ul></div>
