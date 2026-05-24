@@ -180,17 +180,28 @@ function renderReviewsAll(data) {
 }
 
 function renderBeforeAfter(data) {
-  const items = (data.items || []).map(b => `
+  const section = document.getElementById('before-after');
+  const navLink = document.querySelector('nav a[href="#before-after"]');
+  const list = data.items || [];
+  // 등록된 비포/애프터가 없으면 섹션과 메뉴를 숨김 (빈 제목·깨진 사진 방지)
+  if (!list.length) {
+    if (section) section.style.display = 'none';
+    if (navLink) navLink.style.display = 'none';
+    return;
+  }
+  if (section) section.style.display = '';
+  if (navLink) navLink.style.display = '';
+  const items = list.map(b => `
     <div class="card ba-card">
       <h3>${escapeHTML(b.memberLabel)} · ${escapeHTML(b.period)}</h3>
       <div class="images">
-        <figure><img src="${escapeHTML(b.beforeImage)}" alt="before" data-zoom="1" /><figcaption>Before · ${escapeHTML(b.weightBefore)}kg</figcaption></figure>
-        <figure><img src="${escapeHTML(b.afterImage)}" alt="after" data-zoom="1" /><figcaption>After · ${escapeHTML(b.weightAfter)}kg</figcaption></figure>
+        <figure><img src="${escapeHTML(b.beforeImage)}" alt="before" data-zoom="1" onerror="this.style.display='none'" /><figcaption>Before · ${escapeHTML(b.weightBefore)}kg</figcaption></figure>
+        <figure><img src="${escapeHTML(b.afterImage)}" alt="after" data-zoom="1" onerror="this.style.display='none'" /><figcaption>After · ${escapeHTML(b.weightAfter)}kg</figcaption></figure>
       </div>
       <p class="summary">${escapeHTML(b.note || '')}</p>
     </div>
   `).join('');
-  document.getElementById('before-after').innerHTML = `<h2>비포 / 애프터</h2>${items}`;
+  section.innerHTML = `<h2>비포 / 애프터</h2>${items}`;
 }
 
 function renderContact(p) {
