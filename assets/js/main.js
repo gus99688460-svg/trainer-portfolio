@@ -137,7 +137,7 @@ function renderReviewCard(r) {
   if (r.memberAge) chips.push(chipInfo(r.memberAge));
   parseGoals(r.memberGoal).forEach(g => chips.push(chipInfo(g)));
   const chipsHtml = chips.length ? `<div class="chips">${chips.join('')}</div>` : '';
-  const subParts = [r.source, r.date].filter(Boolean).map(escapeHTML);
+  const subParts = [r.source].filter(Boolean).map(escapeHTML);
   const sub = subParts.length ? `<div class="sub-meta">${subParts.join(' · ')}</div>` : '';
   const text = r.text ? `<p class="text">${escapeHTML(r.text)}</p>` : '';
   const image = r.image ? `<figure class="review-image"><img src="${escapeHTML(r.image)}" alt="후기 캡처" loading="lazy" data-zoom="1" /></figure>` : '';
