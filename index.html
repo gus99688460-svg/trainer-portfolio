@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>트레이너 포트폴리오</title>
-  <link rel="stylesheet" href="assets/css/style.css?v=21" />
+  <link rel="stylesheet" href="assets/css/style.css?v=22" />
 </head>
 <body>
   <header id="hero"></header>
@@ -39,6 +39,16 @@
       <button type="button" class="review-modal-close" id="review-close" aria-label="닫기">×</button>
       <div id="review-form-wrap">
         <h3>후기 작성</h3>
+        <div class="review-guide">
+          ✍️ <strong>이렇게 써주시면 큰 힘이 돼요</strong> (아래 흐름대로 2~4문장)<br>
+          ① <strong>운동 전 고민</strong>은 뭐였나요 (몸 상태·망설임) →
+          ② <strong>수업은 어땠나요</strong> (좋았던 점) →
+          ③ <strong>어떤 변화</strong>가 있었나요 (체중·통증·자세·자신감 등 — <strong>숫자</strong>면 더 좋아요) →
+          ④ <strong>어떤 분께 추천</strong>하고 싶나요
+          <div class="review-guide-kw">
+            <span>#체중감량</span><span>#자세교정</span><span>#통증개선</span><span>#운동왕초보</span><span>#안무섭게</span><span>#강추</span>
+          </div>
+        </div>
         <form id="review-form">
           <label>별점</label>
           <div class="star-input" id="star-input" data-value="5">
@@ -69,7 +79,7 @@
           <label>목표 <span class="opt">(선택)</span></label>
           <input type="text" name="memberGoal" maxlength="30" placeholder="예: 다이어트, 체형교정" />
           <label>후기 내용 <span class="req">*</span></label>
-          <textarea name="text" required maxlength="1000" rows="5" placeholder="수업 받으면서 좋았던 점을 자유롭게 적어주세요 :)"></textarea>
+          <textarea name="text" required maxlength="1000" rows="6" placeholder="예) 운동이 처음이라 무서웠는데, 자세부터 차근차근 잡아주셔서 3개월 만에 허리 통증이 줄고 7kg 빠졌어요. 저처럼 운동 초보인 분들께 강추합니다!"></textarea>
           <label>사진 첨부 <span class="opt">(선택, 1장)</span></label>
           <input type="file" name="image" accept="image/*" />
           <div class="form-msg" id="review-msg"></div>
@@ -86,7 +96,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-  <script src="assets/js/firebase-init.js?v=21"></script>
-  <script src="assets/js/main.js?v=21"></script>
+  <script src="assets/js/firebase-init.js?v=22"></script>
+  <script src="assets/js/main.js?v=22"></script>
 </body>
 </html>
