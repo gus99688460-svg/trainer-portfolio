@@ -844,3 +844,18 @@ body { padding-bottom: 76px; }
   line-height: 1.6;
 }
 .review-guide-photo strong { color: #ffd24c; }
+
+/* 비포/애프터 — 합성(전·후 한 장) 표시 */
+.ba-intro { color: #aaa; font-size: 13.5px; line-height: 1.6; margin: -4px 0 18px; }
+.ba-compare { margin: 0; border-radius: 10px; overflow: hidden; border: 1px solid #2a2a2a; cursor: zoom-in; background: #141414; }
+.ba-compare img { width: 100%; display: block; }
+.ba-tag {
+  display: inline-block;
+  margin-top: 12px;
+  background: linear-gradient(135deg, #d4af37, #b8941f);
+  color: #0a0a0a;
+  font-weight: 800;
+  font-size: 13px;
+  padding: 5px 14px;
+  border-radius: 999px;
+}

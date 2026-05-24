@@ -209,7 +209,18 @@ function renderBeforeAfter(data) {
   }
   if (section) section.style.display = '';
   if (navLink) navLink.style.display = '';
-  const items = list.map(b => `
+  const items = list.map(b => {
+    // 합성 이미지(전·후가 한 장에 담긴 경우)
+    if (b.image) {
+      return `
+    <div class="card ba-card">
+      <figure class="ba-compare"><img src="${escapeHTML(b.image)}" alt="비포 애프터" loading="lazy" data-zoom="1" onerror="this.parentElement.parentElement.style.display='none'" /></figure>
+      ${b.label ? `<span class="ba-tag">${escapeHTML(b.label)}</span>` : ''}
+      ${b.note ? `<p class="summary">${escapeHTML(b.note)}</p>` : ''}
+    </div>`;
+    }
+    // 전·후 사진이 따로인 경우
+    return `
     <div class="card ba-card">
       <h3>${escapeHTML(b.memberLabel)} · ${escapeHTML(b.period)}</h3>
       <div class="images">
@@ -217,9 +228,10 @@ function renderBeforeAfter(data) {
         <figure><img src="${escapeHTML(b.afterImage)}" alt="after" data-zoom="1" onerror="this.style.display='none'" /><figcaption>After · ${escapeHTML(b.weightAfter)}kg</figcaption></figure>
       </div>
       <p class="summary">${escapeHTML(b.note || '')}</p>
-    </div>
-  `).join('');
-  section.innerHTML = `<h2>비포 / 애프터</h2>${items}`;
+    </div>`;
+  }).join('');
+  const intro = `<p class="ba-intro">실제 회원님들의 변화예요. (본인 동의 후 게시 · 왼쪽 Before → 오른쪽 After)</p>`;
+  section.innerHTML = `<h2>비포 / 애프터</h2>${intro}${items}`;
 }
 
 function renderContact(p) {
