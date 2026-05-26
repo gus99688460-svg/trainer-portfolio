@@ -1,6 +1,6 @@
 # trainer-portfolio
 
-GitHub Pages로 호스팅되는 1페이지 트레이너 포트폴리오.
+GitHub Pages로 호스팅되는 1페이지 트레이너 사이트 (조태현 트레이너).
 
 ## 콘텐츠 수정 방법
 GitHub 웹에서 `data/` 폴더의 JSON 파일을 열고 연필 아이콘 → 수정 → Commit changes.
