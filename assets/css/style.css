@@ -845,6 +845,39 @@ body { padding-bottom: 76px; }
 }
 .review-guide-photo strong { color: #ffd24c; }
 
+/* 간소화된 후기 폼 — 안내문 / 접기 영역 */
+.review-lead {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #cfcfcf;
+  margin: 0 0 16px;
+}
+.review-lead strong { color: #d4af37; }
+.review-tips {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: #9a9a9a;
+  margin: 8px 0 4px;
+}
+.review-tips b { color: #c9a94a; font-weight: 600; }
+.review-more {
+  margin: 14px 0 4px;
+  border-top: 1px solid #262626;
+  padding-top: 12px;
+}
+.review-more > summary {
+  cursor: pointer;
+  list-style: none;
+  font-size: 13.5px;
+  color: #d4af37;
+  font-weight: 600;
+  padding: 4px 0;
+  user-select: none;
+}
+.review-more > summary::-webkit-details-marker { display: none; }
+.review-more[open] > summary { margin-bottom: 6px; }
+.review-more-body { padding-top: 4px; }
+
 /* 비포/애프터 — 합성(전·후 한 장) 표시 */
 .ba-intro { color: #aaa; font-size: 13.5px; line-height: 1.6; margin: -4px 0 18px; }
 .ba-compare { margin: 0; border-radius: 10px; overflow: hidden; border: 1px solid #2a2a2a; cursor: zoom-in; background: #141414; }

@@ -11,7 +11,7 @@
   <meta property="og:image" content="https://gus99688460-svg.github.io/trainer-portfolio/assets/images/profile.jpg" />
   <meta property="og:url" content="https://gus99688460-svg.github.io/trainer-portfolio/" />
   <meta name="twitter:card" content="summary_large_image" />
-  <link rel="stylesheet" href="assets/css/style.css?v=25" />
+  <link rel="stylesheet" href="assets/css/style.css?v=26" />
 </head>
 <body>
   <header id="hero"></header>
@@ -46,50 +46,48 @@
       <button type="button" class="review-modal-close" id="review-close" aria-label="닫기">×</button>
       <div id="review-form-wrap">
         <h3>후기 작성</h3>
-        <div class="review-guide">
-          ✍️ <strong>이렇게 써주시면 큰 힘이 돼요</strong> (아래 흐름대로 2~4문장)<br>
-          ① <strong>운동 전 고민</strong>은 뭐였나요 (몸 상태·망설임) →
-          ② <strong>수업은 어땠나요</strong> (좋았던 점) →
-          ③ <strong>어떤 변화</strong>가 있었나요 (체중·통증·자세·자신감 등 — <strong>숫자</strong>면 더 좋아요) →
-          ④ <strong>어떤 분께 추천</strong>하고 싶나요
-          <div class="review-guide-photo">📸 <strong>비포/애프터 등 사진을 함께 올려주시면 가장 좋아요!</strong> 변화가 한눈에 보여서 훨씬 와닿거든요.</div>
-          <div class="review-guide-kw">
-            <span>#체중감량</span><span>#자세교정</span><span>#통증개선</span><span>#운동왕초보</span><span>#안무섭게</span><span>#강추</span>
-          </div>
-        </div>
+        <p class="review-lead">편하게 <strong>2~3줄</strong>이면 충분해요. 솔직한 한마디가 큰 힘이 됩니다 🙏</p>
         <form id="review-form">
           <label>별점</label>
           <div class="star-input" id="star-input" data-value="5">
             <span data-star="1">★</span><span data-star="2">★</span><span data-star="3">★</span><span data-star="4">★</span><span data-star="5">★</span>
           </div>
-          <label>이름 / 닉네임 <span class="opt">(선택)</span></label>
-          <input type="text" name="memberName" maxlength="20" placeholder="예: 김O영 / 30대 회원" />
-          <div class="form-row">
-            <div>
-              <label>성별 <span class="opt">(선택)</span></label>
-              <select name="gender">
-                <option value="">선택 안 함</option>
-                <option>여성</option>
-                <option>남성</option>
-              </select>
-            </div>
-            <div>
-              <label>나이대 <span class="opt">(선택)</span></label>
-              <select name="memberAge">
-                <option value="">선택 안 함</option>
-                <option>20대</option>
-                <option>30대</option>
-                <option>40대</option>
-                <option>50대 이상</option>
-              </select>
-            </div>
-          </div>
-          <label>목표 <span class="opt">(선택)</span></label>
-          <input type="text" name="memberGoal" maxlength="30" placeholder="예: 다이어트, 체형교정" />
           <label>후기 내용 <span class="req">*</span></label>
-          <textarea name="text" required maxlength="1000" rows="6" placeholder="예) 운동이 처음이라 무서웠는데, 자세부터 차근차근 잡아주셔서 3개월 만에 허리 통증이 줄고 7kg 빠졌어요. 저처럼 운동 초보인 분들께 강추합니다!"></textarea>
-          <label>사진 첨부 <span class="opt">(선택, 1장)</span></label>
-          <input type="file" name="image" accept="image/*" />
+          <textarea name="text" required maxlength="1000" rows="5" placeholder="예) 운동이 처음이라 무서웠는데 차근차근 잡아주셔서, 3개월 만에 허리 통증도 줄고 7kg 빠졌어요. 운동 초보분들께 강추합니다!"></textarea>
+          <div class="review-tips">💡 떠오르는 것만 적어도 좋아요 — <b>운동 전 고민</b> / <b>좋았던 점</b> / <b>달라진 점</b>(숫자면 더 좋아요) / <b>추천하고 싶은 분</b></div>
+
+          <details class="review-more">
+            <summary>＋ 이름·나이·사진 넣기 <span class="opt">(선택)</span></summary>
+            <div class="review-more-body">
+              <label>이름 / 닉네임</label>
+              <input type="text" name="memberName" maxlength="20" placeholder="예: 김O영 / 30대 회원" />
+              <div class="form-row">
+                <div>
+                  <label>성별</label>
+                  <select name="gender">
+                    <option value="">선택 안 함</option>
+                    <option>여성</option>
+                    <option>남성</option>
+                  </select>
+                </div>
+                <div>
+                  <label>나이대</label>
+                  <select name="memberAge">
+                    <option value="">선택 안 함</option>
+                    <option>20대</option>
+                    <option>30대</option>
+                    <option>40대</option>
+                    <option>50대 이상</option>
+                  </select>
+                </div>
+              </div>
+              <label>목표</label>
+              <input type="text" name="memberGoal" maxlength="30" placeholder="예: 다이어트, 체형교정" />
+              <label>사진 첨부 <span class="opt">(1장 — 비포/애프터면 더 좋아요)</span></label>
+              <input type="file" name="image" accept="image/*" />
+            </div>
+          </details>
+
           <div class="form-msg" id="review-msg"></div>
           <button type="submit" class="review-submit" id="review-submit">후기 등록하기</button>
         </form>
@@ -104,7 +102,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-  <script src="assets/js/firebase-init.js?v=25"></script>
-  <script src="assets/js/main.js?v=25"></script>
+  <script src="assets/js/firebase-init.js?v=26"></script>
+  <script src="assets/js/main.js?v=26"></script>
 </body>
 </html>

@@ -519,5 +519,14 @@ async function main() {
   } catch (e) { console.error(e); }
 
   try { renderBeforeAfter(await loadJSON('data/before-after.json')); } catch (e) { console.error(e); }
+
+  // 후기 직링크: ?review=1 로 들어오면 후기 작성 폼을 바로 열어줌
+  try {
+    if (new URLSearchParams(location.search).get('review')) {
+      openReviewModal();
+      const sec = document.getElementById('reviews');
+      if (sec) sec.scrollIntoView();
+    }
+  } catch (e) { console.error(e); }
 }
 main();
