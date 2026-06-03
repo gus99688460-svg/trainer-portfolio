@@ -142,8 +142,13 @@ function renderReviewCard(r) {
   const subParts = [r.source].filter(Boolean).map(escapeHTML);
   const sub = subParts.length ? `<div class="sub-meta">${subParts.join(' · ')}</div>` : '';
   const text = r.text ? `<p class="text">${escapeHTML(r.text)}</p>` : '';
-  const image = r.image ? `<figure class="review-image"><img src="${escapeHTML(r.image)}" alt="후기 캡처" loading="lazy" data-zoom="1" /></figure>` : '';
-  return `<div class="card review-card${r.featured ? ' featured' : ''}">${badge}${stars}${name}${chipsHtml}${sub}${text}${image}</div>`;
+  const imgs = Array.isArray(r.images) ? r.images : (r.image ? [r.image] : []);
+  const imagesHtml = imgs.length
+    ? `<div class="review-images${imgs.length === 1 ? ' single' : ''}">${imgs.map(src =>
+        `<figure class="review-image"><img src="${escapeHTML(src)}" alt="후기 캡처" loading="lazy" data-zoom="1" /></figure>`
+      ).join('')}</div>`
+    : '';
+  return `<div class="card review-card${r.featured ? ' featured' : ''}">${badge}${stars}${name}${chipsHtml}${sub}${text}${imagesHtml}</div>`;
 }
 
 function renderFilterBanner() {

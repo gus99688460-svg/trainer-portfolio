@@ -277,9 +277,11 @@ footer {
   .hero-cta { font-size: 17px; padding: 16px 40px; }
 }
 
-.review-image { margin-top: 14px; border-radius: 10px; overflow: hidden; border: 1px solid #2a2a2a; cursor: zoom-in; }
+.review-image { margin: 0; border-radius: 10px; overflow: hidden; border: 1px solid #2a2a2a; cursor: zoom-in; }
 .review-image img { width: 100%; display: block; transition: opacity 0.2s; }
 .review-image img:active { opacity: 0.85; }
+.review-images { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
+.review-images.single { grid-template-columns: 1fr; }
 
 .lightbox {
   position: fixed; inset: 0;
