@@ -915,3 +915,85 @@ body { padding-bottom: 76px; }
   .hero-keywords { max-width: 460px; }
   .hero-keywords span { font-size: 13px; }
 }
+
+/* ===== 비포/애프터 탭 + 가로 스와이프 캐러셀 ===== */
+.ba-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin: 16px 0 20px;
+}
+.ba-tab {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 9px 10px;
+  border-radius: 999px;
+  background: #1a1a1a;
+  color: #aaa;
+  border: 1px solid #2a2a2a;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  font-family: inherit;
+}
+.ba-tab .ba-tab-count {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: #2a2a2a;
+  color: #888;
+  font-size: 11px;
+  font-weight: 600;
+}
+.ba-tab.active {
+  background: linear-gradient(135deg, #d4af37, #b8941f);
+  color: #0a0a0a;
+  border-color: #d4af37;
+  font-weight: 700;
+}
+.ba-tab.active .ba-tab-count {
+  background: rgba(10, 10, 10, 0.25);
+  color: #0a0a0a;
+}
+.ba-page { display: none; }
+.ba-page.active { display: block; }
+.ba-carousel {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 4px 0;
+}
+.ba-carousel::-webkit-scrollbar { display: none; }
+.ba-slide {
+  flex: 0 0 100%;
+  scroll-snap-align: center;
+}
+.ba-pagination {
+  text-align: center;
+  color: #888;
+  font-size: 13px;
+  margin-top: 12px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+.ba-pag-current {
+  color: #d4af37;
+  font-weight: 700;
+}
+.ba-hint {
+  text-align: center;
+  color: #555;
+  font-size: 12px;
+  margin-top: 4px;
+  user-select: none;
+}
+@media (min-width: 768px) {
+  .ba-tab { font-size: 14px; padding: 10px 16px; flex: 0 1 auto; }
+  .ba-slide { flex-basis: calc(50% - 6px); }
+}

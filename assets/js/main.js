@@ -203,7 +203,6 @@ function renderBeforeAfter(data) {
   const section = document.getElementById('before-after');
   const navLink = document.querySelector('nav a[href="#before-after"]');
   const list = data.items || [];
-  // 등록된 비포/애프터가 없으면 섹션과 메뉴를 숨김 (빈 제목·깨진 사진 방지)
   if (!list.length) {
     if (section) section.style.display = 'none';
     if (navLink) navLink.style.display = 'none';
@@ -211,28 +210,93 @@ function renderBeforeAfter(data) {
   }
   if (section) section.style.display = '';
   if (navLink) navLink.style.display = '';
-  const items = list.map(b => {
-    // 합성 이미지(전·후가 한 장에 담긴 경우)
+
+  const CATEGORIES = [
+    { id: 'diet',        label: '다이어트' },
+    { id: 'muscle',      label: '근육 증가' },
+    { id: 'posture',     label: '체형교정' },
+    { id: 'competition', label: '시합·바디프로필' }
+  ];
+
+  const buckets = {};
+  CATEGORIES.forEach(c => { buckets[c.id] = []; });
+  list.forEach(b => {
+    const cat = b.category && buckets[b.category] ? b.category : 'diet';
+    buckets[cat].push(b);
+  });
+
+  const renderSlide = (b) => {
+    // 합성(전·후 한 장)
     if (b.image) {
       return `
-    <div class="card ba-card">
-      <figure class="ba-compare"><img src="${escapeHTML(b.image)}" alt="비포 애프터" loading="lazy" data-zoom="1" onerror="this.parentElement.parentElement.style.display='none'" /></figure>
-      ${b.label ? `<span class="ba-tag">${escapeHTML(b.label)}</span>` : ''}
-      ${b.note ? `<p class="summary">${escapeHTML(b.note)}</p>` : ''}
-    </div>`;
+        <div class="ba-slide">
+          <div class="card ba-card">
+            <figure class="ba-compare"><img src="${escapeHTML(b.image)}" alt="비포 애프터" loading="lazy" data-zoom="1" onerror="this.parentElement.parentElement.style.display='none'" /></figure>
+            ${b.label ? `<span class="ba-tag">${escapeHTML(b.label)}</span>` : ''}
+            ${b.note ? `<p class="summary">${escapeHTML(b.note)}</p>` : ''}
+          </div>
+        </div>`;
     }
-    // 전·후 사진이 따로인 경우
+    // 전·후 분리
     return `
-    <div class="card ba-card">
-      <h3>${escapeHTML(b.memberLabel)} · ${escapeHTML(b.period)}</h3>
-      <div class="images">
-        <figure><img src="${escapeHTML(b.beforeImage)}" alt="before" data-zoom="1" onerror="this.style.display='none'" /><figcaption>Before · ${escapeHTML(b.weightBefore)}kg</figcaption></figure>
-        <figure><img src="${escapeHTML(b.afterImage)}" alt="after" data-zoom="1" onerror="this.style.display='none'" /><figcaption>After · ${escapeHTML(b.weightAfter)}kg</figcaption></figure>
+      <div class="ba-slide">
+        <div class="card ba-card">
+          <h3>${escapeHTML(b.memberLabel)} · ${escapeHTML(b.period)}</h3>
+          <div class="images">
+            <figure><img src="${escapeHTML(b.beforeImage)}" alt="before" data-zoom="1" onerror="this.style.display='none'" /><figcaption>Before · ${escapeHTML(b.weightBefore)}kg</figcaption></figure>
+            <figure><img src="${escapeHTML(b.afterImage)}" alt="after" data-zoom="1" onerror="this.style.display='none'" /><figcaption>After · ${escapeHTML(b.weightAfter)}kg</figcaption></figure>
+          </div>
+          <p class="summary">${escapeHTML(b.note || '')}</p>
+        </div>
+      </div>`;
+  };
+
+  const visibleCats = CATEGORIES.filter(c => buckets[c.id].length > 0);
+  const defaultCat = (visibleCats[0] && visibleCats[0].id) || CATEGORIES[0].id;
+
+  const tabs = visibleCats.map(c =>
+    `<button class="ba-tab${c.id === defaultCat ? ' active' : ''}" data-ba-cat="${c.id}">${escapeHTML(c.label)} <span class="ba-tab-count">${buckets[c.id].length}</span></button>`
+  ).join('');
+
+  const pages = visibleCats.map(c => {
+    const slides = buckets[c.id].map(renderSlide).join('');
+    const total = buckets[c.id].length;
+    return `
+      <div class="ba-page${c.id === defaultCat ? ' active' : ''}" data-ba-cat="${c.id}">
+        <div class="ba-carousel">${slides}</div>
+        ${total > 1
+          ? `<div class="ba-pagination"><span class="ba-pag-current">1</span> / ${total}</div>
+             <div class="ba-hint">← 좌우로 밀어서 보기 →</div>`
+          : ''}
       </div>
-      <p class="summary">${escapeHTML(b.note || '')}</p>
-    </div>`;
+    `;
   }).join('');
-  section.innerHTML = `<h2>비포 / 애프터</h2>${items}`;
+
+  section.innerHTML = `
+    <h2>비포 / 애프터</h2>
+    <div class="ba-tabs">${tabs}</div>
+    <div class="ba-pages">${pages}</div>
+  `;
+
+  section.querySelectorAll('.ba-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const cat = tab.dataset.baCat;
+      section.querySelectorAll('.ba-tab').forEach(t => t.classList.toggle('active', t === tab));
+      section.querySelectorAll('.ba-page').forEach(p => p.classList.toggle('active', p.dataset.baCat === cat));
+    });
+  });
+
+  section.querySelectorAll('.ba-page').forEach(page => {
+    const carousel = page.querySelector('.ba-carousel');
+    const current = page.querySelector('.ba-pag-current');
+    if (!carousel || !current) return;
+    carousel.addEventListener('scroll', () => {
+      const total = carousel.querySelectorAll('.ba-slide').length;
+      if (!total || !carousel.clientWidth) return;
+      const idx = Math.round(carousel.scrollLeft / carousel.clientWidth);
+      current.textContent = String(Math.min(Math.max(idx + 1, 1), total));
+    }, { passive: true });
+  });
 }
 
 function renderContact(p) {

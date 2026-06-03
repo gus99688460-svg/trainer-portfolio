@@ -1,18 +1,18 @@
 {
   "items": [
-    { "id": "ba8", "image": "assets/images/before-after/ba8.jpg", "label": "−38kg 감량 · 104 → 66kg" },
-    { "id": "ba9", "image": "assets/images/before-after/ba9.jpg", "label": "운동 입문에서 대회 출전까지" },
-    { "id": "ba1", "image": "assets/images/before-after/ba1.png", "label": "다이어트 · 복부 감량" },
-    { "id": "ba10", "image": "assets/images/before-after/ba10.jpg", "label": "체지방 감량 · 근육 증가" },
-    { "id": "ba2", "image": "assets/images/before-after/ba2.png", "label": "체중 감량 · 복근 만들기" },
-    { "id": "ba11", "image": "assets/images/before-after/ba11.jpg", "label": "체지방 감량 · 복부 라인" },
-    { "id": "ba3", "image": "assets/images/before-after/ba3.png", "label": "다이어트 + 근육 증가" },
-    { "id": "ba12", "image": "assets/images/before-after/ba12.jpg", "label": "등 · 상체 근육 발달" },
-    { "id": "ba4", "image": "assets/images/before-after/ba4.png", "label": "체지방 감량 · 체형 정리" },
-    { "id": "ba13", "image": "assets/images/before-after/ba13.jpg", "label": "마른 체형 · 근육 증가" },
-    { "id": "ba5", "image": "assets/images/before-after/ba5.png", "label": "근육 증가 · 바디프로필 준비" },
-    { "id": "ba14", "image": "assets/images/before-after/ba14.jpg", "label": "다이어트 · 복근 만들기" },
-    { "id": "ba6", "image": "assets/images/before-after/ba6.png", "label": "근육량 증가" },
-    { "id": "ba7", "image": "assets/images/before-after/ba7.png", "label": "등 · 상체 라인 발달" }
+    { "id": "ba8",  "image": "assets/images/before-after/ba8.jpg",  "label": "−38kg 감량 · 104 → 66kg", "category": "diet" },
+    { "id": "ba9",  "image": "assets/images/before-after/ba9.jpg",  "label": "운동 입문에서 대회 출전까지", "category": "competition" },
+    { "id": "ba1",  "image": "assets/images/before-after/ba1.png",  "label": "다이어트 · 복부 감량", "category": "diet" },
+    { "id": "ba10", "image": "assets/images/before-after/ba10.jpg", "label": "체지방 감량 · 근육 증가", "category": "muscle" },
+    { "id": "ba2",  "image": "assets/images/before-after/ba2.png",  "label": "체중 감량 · 복근 만들기", "category": "diet" },
+    { "id": "ba11", "image": "assets/images/before-after/ba11.jpg", "label": "체지방 감량 · 복부 라인", "category": "diet" },
+    { "id": "ba3",  "image": "assets/images/before-after/ba3.png",  "label": "다이어트 + 근육 증가", "category": "muscle" },
+    { "id": "ba12", "image": "assets/images/before-after/ba12.jpg", "label": "등 · 상체 근육 발달", "category": "posture" },
+    { "id": "ba4",  "image": "assets/images/before-after/ba4.png",  "label": "체지방 감량 · 체형 정리", "category": "diet" },
+    { "id": "ba13", "image": "assets/images/before-after/ba13.jpg", "label": "마른 체형 · 근육 증가", "category": "muscle" },
+    { "id": "ba5",  "image": "assets/images/before-after/ba5.png",  "label": "근육 증가 · 바디프로필 준비", "category": "competition" },
+    { "id": "ba14", "image": "assets/images/before-after/ba14.jpg", "label": "다이어트 · 복근 만들기", "category": "diet" },
+    { "id": "ba6",  "image": "assets/images/before-after/ba6.png",  "label": "근육량 증가", "category": "muscle" },
+    { "id": "ba7",  "image": "assets/images/before-after/ba7.png",  "label": "등 · 상체 라인 발달", "category": "posture" }
   ]
 }
