@@ -131,6 +131,8 @@ function renderFilterBar() {
 }
 
 function renderReviewCard(r) {
+  const num = r.id ? r.id.replace(/^rv0?/, '') : '';
+  const numBadge = num ? `<div class="review-num">#${escapeHTML(num)}</div>` : '';
   const badge = r.featured ? `<div class="review-badge">⭐ 추천 후기</div>` : '';
   const stars = r.rating ? `<div class="stars">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</div>` : '';
   const name = r.memberName ? `<h3 class="member-name">${escapeHTML(r.memberName)}</h3>` : '';
@@ -148,7 +150,7 @@ function renderReviewCard(r) {
         `<figure class="review-image"><img src="${escapeHTML(src)}" alt="후기 캡처" loading="lazy" data-zoom="1" /></figure>`
       ).join('')}</div>`
     : '';
-  return `<div class="card review-card${r.featured ? ' featured' : ''}">${badge}${stars}${name}${chipsHtml}${sub}${text}${imagesHtml}</div>`;
+  return `<div class="card review-card${r.featured ? ' featured' : ''}">${numBadge}${badge}${stars}${name}${chipsHtml}${sub}${text}${imagesHtml}</div>`;
 }
 
 function renderFilterBanner() {

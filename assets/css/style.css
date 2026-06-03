@@ -277,6 +277,17 @@ footer {
   .hero-cta { font-size: 17px; padding: 16px 40px; }
 }
 
+.review-num {
+  display: inline-block;
+  background: #2a2a2a;
+  color: #d4af37;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
 .review-image { margin: 0; border-radius: 10px; overflow: hidden; border: 1px solid #2a2a2a; cursor: zoom-in; }
 .review-image img { width: 100%; display: block; transition: opacity 0.2s; }
 .review-image img:active { opacity: 0.85; }
