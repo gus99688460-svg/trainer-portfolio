@@ -1023,3 +1023,16 @@ img { display: block; max-width: 100%; }
   }
 }
 
+
+/* ===== v3: cta-investment (Slide 7 강조 라인) ===== */
+.cta-investment {
+  margin-top: 18px;
+  font-size: clamp(16px, 2.4vw, 22px);
+  font-weight: 700;
+  color: var(--gold-1, #d4af37);
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+}
+@media print {
+  .cta-investment { color: #b8941f !important; }
+}
