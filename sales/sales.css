@@ -1036,3 +1036,196 @@ img { display: block; max-width: 100%; }
 @media print {
   .cta-investment { color: #b8941f !important; }
 }
+
+/* ===== v4: 슬라이드 전체 재구성 ===== */
+
+/* Slide 1 — 회원 호명 강조 */
+.hero-prelude {
+  font-size: clamp(13px, 1.6vw, 16px);
+  color: var(--fg-2, #aaa);
+  letter-spacing: -0.01em;
+  margin-bottom: 14px;
+  opacity: 0.85;
+}
+
+/* Slide 2 — 5 카드 그리드 */
+.target-grid--5 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+@media (min-width: 900px) {
+  .target-grid--5 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  /* 마지막 2개는 중앙 정렬되어 3+2 흐름 자연스럽게 */
+  .target-grid--5 .target-card:nth-child(4) { grid-column: 1 / 2; }
+  .target-grid--5 .target-card:nth-child(5) { grid-column: 2 / 4; max-width: 66%; justify-self: center; }
+}
+
+/* Slide 4 — 단계별 사진 슬롯 */
+.process-line--photo .process-step {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.process-photo {
+  position: relative;
+  width: 100%;
+  margin: 10px 0 12px;
+  aspect-ratio: 4 / 3;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.process-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.process-photo__placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #555;
+  font-size: 12px;
+  text-align: center;
+  padding: 8px;
+  pointer-events: none;
+  opacity: 0;
+}
+.process-photo.is-empty img { display: none; }
+.process-photo.is-empty .process-photo__placeholder { opacity: 1; }
+
+/* Slide 5 — 6 카테고리 비포애프터 그리드 */
+.ba-cat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: 18px 0 14px;
+}
+@media (max-width: 720px) {
+  .ba-cat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.ba-cat-card {
+  display: flex;
+  flex-direction: column;
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 0;
+  min-height: 0;
+}
+.ba-cat-card__label {
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #d4af37;
+  letter-spacing: -0.01em;
+  border-bottom: 1px solid #2a2a2a;
+  text-align: center;
+}
+.ba-cat-card__img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: #0a0a0a;
+  overflow: hidden;
+}
+.ba-cat-card__img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.ba-cat-card__tag {
+  padding: 8px 12px;
+  font-size: 12px;
+  color: #aaa;
+  text-align: center;
+  border-top: 1px solid #2a2a2a;
+}
+.ba-cat-card__placeholder {
+  aspect-ratio: 4 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #555;
+  font-size: 13px;
+  background: repeating-linear-gradient(45deg, #161616, #161616 10px, #181818 10px, #181818 20px);
+  border-radius: 0;
+}
+.ba-cat-card.is-pending .ba-cat-card__img-wrap,
+.ba-cat-card.is-pending .ba-cat-card__tag {
+  display: none;
+}
+
+/* Slide 6 — 비교 + 숫자 + 경력/자격 통합 */
+.slide--diff .slide-title { font-size: clamp(22px, 3vw, 32px); }
+.slide--diff .slide-sub { margin-bottom: 18px; }
+
+.compare-grid--compact { gap: 10px; margin: 8px 0 12px; }
+.compare-grid--compact .compare-col { padding: 14px 16px; }
+.compare-grid--compact .compare-col__label { font-size: 14px; }
+.compare-grid--compact .compare-list li { font-size: 13px; line-height: 1.5; padding: 4px 0; }
+
+.number-grid--compact {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0 0 14px;
+}
+.number-grid--compact .number-card { padding: 10px 14px; text-align: center; }
+.number-grid--compact .number-value { font-size: clamp(26px, 4vw, 38px); }
+.number-grid--compact .number-label { font-size: 12px; color: #aaa; }
+
+.credentials {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 16px;
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  padding: 14px 18px;
+}
+@media (max-width: 720px) {
+  .credentials { grid-template-columns: 1fr; }
+}
+.credentials-col__title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #d4af37;
+  margin: 0 0 8px;
+  letter-spacing: 0.02em;
+}
+.credentials-col ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.credentials-col li {
+  font-size: 11.5px;
+  line-height: 1.55;
+  color: #ccc;
+  padding: 2px 0;
+}
+
+@media print {
+  .process-photo.is-empty .process-photo__placeholder,
+  .ba-cat-card__placeholder {
+    color: #888 !important;
+    background: #f0f0f0 !important;
+  }
+  .ba-cat-card__label,
+  .credentials-col__title { color: #b8941f !important; }
+}
