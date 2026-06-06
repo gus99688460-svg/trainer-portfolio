@@ -1,4 +1,4 @@
-const ASSET_VERSION = '34';
+const ASSET_VERSION = '35';
 async function loadJSON(path) {
   const sep = path.includes('?') ? '&' : '?';
   const res = await fetch(`${path}${sep}v=${ASSET_VERSION}`);
