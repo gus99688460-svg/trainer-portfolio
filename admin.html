@@ -36,6 +36,18 @@
     .rcard img { width: 100%; max-width: 240px; border-radius: 8px; margin-top: 10px; display: block; }
     .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
     .empty, .loading { color: #888; text-align: center; padding: 36px 0; }
+    .img-mgr { background: #141414; border: 1px solid #2a2a2a; border-radius: 8px; padding: 12px; margin-top: 12px; }
+    .img-mgr-title { font-size: 13px; color: #bbb; margin-bottom: 8px; font-weight: 700; }
+    .img-mgr-thumbs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+    .img-mgr-thumb { position: relative; width: 76px; height: 76px; border-radius: 6px; overflow: hidden; background: #222; }
+    .img-mgr-thumb img { width: 100%; height: 100%; object-fit: cover; margin: 0; max-width: none; border-radius: 0; }
+    .img-mgr-thumb button { position: absolute; top: 2px; right: 2px; width: 20px; height: 20px; border: none; border-radius: 50%; background: rgba(0,0,0,0.85); color: #ff6b6b; font-size: 14px; cursor: pointer; line-height: 1; padding: 0; }
+    .img-mgr-empty { color: #777; font-size: 12px; padding: 6px 0; }
+    .img-mgr-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .img-mgr input[type="file"] { font-size: 12px; color: #ccc; }
+    .img-mgr .btn-img { background: #2a4a7a; color: #fff; font-size: 12px; padding: 8px 12px; }
+    .img-mgr .btn-img-replace { background: #6a2e2e; }
+    .img-mgr-msg { font-size: 12px; color: #ffe082; margin-top: 6px; min-height: 14px; }
   </style>
 </head>
 <body>
@@ -66,7 +78,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-  <script src="assets/js/firebase-init.js?v=25"></script>
+  <script src="assets/js/firebase-init.js?v=31"></script>
   <script>
     var currentTab = 'pending';
 
@@ -75,6 +87,37 @@
       return String(s).replace(/[&<>"']/g, function (m) {
         return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
       });
+    }
+
+    function compressImage(file, maxSize, quality) {
+      maxSize = maxSize || 1000;
+      quality = quality || 0.7;
+      return new Promise(function (resolve, reject) {
+        if (!file) return resolve('');
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          var img = new Image();
+          img.onload = function () {
+            var w = img.width, h = img.height;
+            if (w > h && w > maxSize) { h = Math.round(h * maxSize / w); w = maxSize; }
+            else if (h > maxSize) { w = Math.round(w * maxSize / h); h = maxSize; }
+            var canvas = document.createElement('canvas');
+            canvas.width = w; canvas.height = h;
+            canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+            resolve(canvas.toDataURL('image/jpeg', quality));
+          };
+          img.onerror = reject;
+          img.src = e.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function getImageList(r) {
+      if (Array.isArray(r.images)) return r.images.slice();
+      if (r.image) return [r.image];
+      return [];
     }
 
     auth.onAuthStateChanged(function (user) {
@@ -163,7 +206,23 @@
         var meta = [r.source, r.date].filter(Boolean).map(esc).join(' · ');
         var metaHtml = meta ? '<div class="meta">' + meta + '</div>' : '';
         var text = r.text ? '<div class="text">' + esc(r.text) + '</div>' : '';
-        var img = r.image ? '<img src="' + r.image + '" alt="후기 사진">' : '';
+        var imgList = getImageList(r);
+        var thumbs = imgList.length
+          ? imgList.map(function (src, i) {
+              return '<div class="img-mgr-thumb"><img src="' + src + '" alt=""><button onclick="removeImage(\'' + r._id + '\', ' + i + ')" title="이 사진 삭제">×</button></div>';
+            }).join('')
+          : '<div class="img-mgr-empty">사진 없음</div>';
+        var imgMgr = ''
+          + '<div class="img-mgr">'
+          + '  <div class="img-mgr-title">📷 사진 (' + imgList.length + '장)</div>'
+          + '  <div class="img-mgr-thumbs">' + thumbs + '</div>'
+          + '  <div class="img-mgr-row">'
+          + '    <input type="file" id="add-' + r._id + '" accept="image/*" multiple>'
+          + '    <button class="btn btn-img" onclick="addImages(\'' + r._id + '\')">＋ 추가</button>'
+          + '    <button class="btn btn-img btn-img-replace" onclick="replaceImages(\'' + r._id + '\')">↻ 전체 교체</button>'
+          + '  </div>'
+          + '  <div class="img-mgr-msg" id="msg-' + r._id + '"></div>'
+          + '</div>';
         var actions;
         if (currentTab === 'pending') {
           actions = '<button class="btn btn-approve" onclick="approveReview(\'' + r._id + '\')">✅ 승인(공개)</button>'
@@ -176,7 +235,7 @@
                   + '<button class="btn btn-warn" onclick="unapproveReview(\'' + r._id + '\')">↩ 공개 취소</button>'
                   + '<button class="btn btn-danger" onclick="deleteReview(\'' + r._id + '\')">🗑 삭제</button>';
         }
-        return '<div class="rcard">' + featBadge + stars + name + chipsHtml + metaHtml + text + img + '<div class="actions">' + actions + '</div></div>';
+        return '<div class="rcard" data-id="' + r._id + '">' + featBadge + stars + name + chipsHtml + metaHtml + text + imgMgr + '<div class="actions">' + actions + '</div></div>';
       }).join('');
     }
 
@@ -192,6 +251,55 @@
     };
     window.toggleFeatured = function (id, val) {
       db.collection('reviews').doc(id).update({ featured: val }).then(loadList).catch(function (e) { alert('실패: ' + e.message); });
+    };
+
+    function readDoc(id) {
+      return db.collection('reviews').doc(id).get().then(function (s) { return s.data() || {}; });
+    }
+
+    function processFiles(files) {
+      var arr = Array.prototype.slice.call(files);
+      return Promise.all(arr.map(function (f) { return compressImage(f, 1200, 0.75); }));
+    }
+
+    window.addImages = function (id) {
+      var input = document.getElementById('add-' + id);
+      var msg = document.getElementById('msg-' + id);
+      if (!input || !input.files.length) { msg.textContent = '파일을 먼저 선택해주세요.'; return; }
+      msg.textContent = '사진 처리 중...';
+      readDoc(id).then(function (r) {
+        var existing = Array.isArray(r.images) ? r.images.slice() : (r.image ? [r.image] : []);
+        return processFiles(input.files).then(function (newOnes) {
+          var merged = existing.concat(newOnes);
+          return db.collection('reviews').doc(id).update({ images: merged, image: firebase.firestore.FieldValue.delete() });
+        });
+      }).then(function () {
+        msg.textContent = '✅ 추가 완료';
+        loadList();
+      }).catch(function (e) { msg.textContent = '실패: ' + e.message; });
+    };
+
+    window.replaceImages = function (id) {
+      var input = document.getElementById('add-' + id);
+      var msg = document.getElementById('msg-' + id);
+      if (!input || !input.files.length) { msg.textContent = '교체할 파일을 먼저 선택해주세요.'; return; }
+      if (!confirm('기존 사진을 모두 지우고 선택한 파일로 교체할까요?')) return;
+      msg.textContent = '사진 처리 중...';
+      processFiles(input.files).then(function (newOnes) {
+        return db.collection('reviews').doc(id).update({ images: newOnes, image: firebase.firestore.FieldValue.delete() });
+      }).then(function () {
+        msg.textContent = '✅ 교체 완료';
+        loadList();
+      }).catch(function (e) { msg.textContent = '실패: ' + e.message; });
+    };
+
+    window.removeImage = function (id, idx) {
+      if (!confirm('이 사진을 삭제할까요?')) return;
+      readDoc(id).then(function (r) {
+        var arr = Array.isArray(r.images) ? r.images.slice() : (r.image ? [r.image] : []);
+        arr.splice(idx, 1);
+        return db.collection('reviews').doc(id).update({ images: arr, image: firebase.firestore.FieldValue.delete() });
+      }).then(loadList).catch(function (e) { alert('실패: ' + e.message); });
     };
   </script>
 </body>
