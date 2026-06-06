@@ -1,4 +1,4 @@
-const ASSET_VERSION = '37';
+const ASSET_VERSION = '38';
 async function loadJSON(path) {
   const sep = path.includes('?') ? '&' : '?';
   const res = await fetch(`${path}${sep}v=${ASSET_VERSION}`);
@@ -306,8 +306,8 @@ function renderBeforeAfter(data) {
   }).join('');
 
   section.innerHTML = `
-    <h2>비포 / 애프터</h2>
-    <div class="ba-tabs">${tabs}</div>
+    <h2>${escapeHTML(data.title || '비포 / 애프터')}</h2>
+    ${visibleCats.length > 1 ? `<div class="ba-tabs">${tabs}</div>` : ''}
     <div class="ba-pages">${pages}</div>
   `;
 
