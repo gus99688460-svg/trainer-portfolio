@@ -1,4 +1,4 @@
-const ASSET_VERSION = '33';
+const ASSET_VERSION = '34';
 async function loadJSON(path) {
   const sep = path.includes('?') ? '&' : '?';
   const res = await fetch(`${path}${sep}v=${ASSET_VERSION}`);
@@ -17,11 +17,12 @@ function parseGoals(s) {
 
 const reviewState = { all: [], filters: { gender: null, age: null, goal: null }, sortMode: 'latest' };
 
-// 닉네임 기반 로컬 사진 자동 첨부 (Firebase에 등록된 후기에 사진 매핑)
+// 닉네임 기반 로컬 사진 강제 교체 (Firebase 후기의 기존 image도 덮어씀)
+// key는 r.memberName에 포함되어 있어야 매칭 (substring) — "길호영" "길호영님" 모두 OK
 const NAME_TO_IMAGES = {
   '길호영': ['assets/images/reviews/gilhoyoung.jpg'],
   '김갑연': ['assets/images/reviews/kimgapyeon-1.jpg', 'assets/images/reviews/kimgapyeon-2.jpg'],
-  '송파러': [
+  '송파': [
     'assets/images/reviews/songparu-1.png',
     'assets/images/reviews/songparu-2.png',
     'assets/images/reviews/songparu-3.jpg',
@@ -29,10 +30,14 @@ const NAME_TO_IMAGES = {
   ]
 };
 function attachLocalImages(r) {
-  if (Array.isArray(r.images) && r.images.length) return;
-  if (r.image) return;
-  const imgs = r.memberName ? NAME_TO_IMAGES[r.memberName] : null;
-  if (imgs) r.images = imgs;
+  if (!r.memberName) return;
+  for (const k in NAME_TO_IMAGES) {
+    if (r.memberName.indexOf(k) !== -1) {
+      r.images = NAME_TO_IMAGES[k];
+      r.image = '';
+      return;
+    }
+  }
 }
 
 function renderHero(p) {
