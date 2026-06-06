@@ -1,5 +1,7 @@
+const ASSET_VERSION = '30';
 async function loadJSON(path) {
-  const res = await fetch(path);
+  const sep = path.includes('?') ? '&' : '?';
+  const res = await fetch(`${path}${sep}v=${ASSET_VERSION}`);
   if (!res.ok) throw new Error(path + ' load failed');
   return res.json();
 }
